@@ -7,6 +7,7 @@
  **/
 
 class MoonPhase {
+	private $timestamp;
 	private $phase;
 	private $illum;
 	private $age;
@@ -14,6 +15,10 @@ class MoonPhase {
 	private $angdia;
 	private $sundist;
 	private $sunangdia;
+
+	private $synmonth;
+
+	private $quarters = null;
 
 	function __construct($pdate) {
 		/*  Astronomical constants  */
@@ -36,11 +41,14 @@ class MoonPhase {
 		$msmax = 384401;			// Semi-major axis of Moon's orbit in km
 		$mparallax = 0.9507;		// Parallax at distance a from Earth
 		$synmonth = 29.53058868;	// Synodic month (new Moon to new Moon)
+		$this->synmonth = $synmonth;
 		$lunatbase = 2423436.0;		// Base date for E. W. Brown's numbered series of lunations (1923 January 16)
 
 		/*  Properties of the Earth  */
 		// $earthrad = 6378.16;				// Radius of Earth in kilometres
 		// $PI = 3.14159265358979323846;	// Assume not near black hole
+
+		$this->timestamp = $pdate;
 
 		// pdate is coming in as a UNIX timstamp, so convert it to Julian
 		$pdate =  $pdate / 86400 + 2440587.5;
@@ -117,6 +125,187 @@ class MoonPhase {
 		return $e;
 	}
 
+	/*  Calculates  time  of  the mean new Moon for a given
+		base date.  This argument K to this function is the
+		precomputed synodic month index, given by:
+            K = (year - 1900) * 12.3685
+        where year is expressed as a year and fractional year.
+	*/
+	private function meanphase($sdate, $k){
+		// Time in Julian centuries from 1900 January 0.5
+		$t = ( $sdate - 2415020.0 ) / 36525;
+		$t2 = $t * $t;
+		$t3 = $t2 * $t;
+
+		$nt1 = 2415020.75933 + $this->synmonth * $k
+				+ 0.0001178 * $t2
+				- 0.000000155 * $t3
+				+ 0.00033 * sin( deg2rad( 166.56 + 132.87 * $t - 0.009173 * $t2 ) );
+
+		return $nt1;
+	}
+
+	/*  Given a K value used to determine the mean phase of
+		the new moon, and a phase selector (0.0, 0.25, 0.5,
+		0.75), obtain the true, corrected phase time.
+	*/
+	private function truephase($k, $phase){
+		$apcor = false;
+
+		$k += $phase;				// Add phase to new moon time
+		$t = $k / 1236.85;			// Time in Julian centuries from 1900 January 0.5
+		$t2 = $t * $t;				// Square for frequent use
+		$t3 = $t2 * $t;				// Cube for frequent use
+		$pt = 2415020.75933			// Mean time of phase
+			 + $this->synmonth * $k
+			 + 0.0001178 * $t2
+			 - 0.000000155 * $t3
+			 + 0.00033 * sin( deg2rad( 166.56 + 132.87 * $t - 0.009173 * $t2 ) );
+
+		$m = 359.2242 + 29.10535608 * $k - 0.0000333 * $t2 - 0.00000347 * $t3;			// Sun's mean anomaly
+		$mprime = 306.0253 + 385.81691806 * $k + 0.0107306 * $t2 + 0.00001236 * $t3;	// Moon's mean anomaly
+		$f = 21.2964 + 390.67050646 * $k - 0.0016528 * $t2 - 0.00000239 * $t3;			// Moon's argument of latitude
+		if ( $phase < 0.01 || abs( $phase - 0.5 ) < 0.01 ) {
+		   // Corrections for New and Full Moon
+			$pt +=  (0.1734 - 0.000393 * $t) * sin( deg2rad( $m ) )
+					+ 0.0021 * sin( deg2rad( 2 * $m ) )
+					- 0.4068 * sin( deg2rad( $mprime ) )
+					+ 0.0161 * sin( deg2rad( 2 * $mprime) )
+					- 0.0004 * sin( deg2rad( 3 * $mprime ) )
+					+ 0.0104 * sin( deg2rad( 2 * $f ) )
+					- 0.0051 * sin( deg2rad( $m + $mprime ) )
+					- 0.0074 * sin( deg2rad( $m - $mprime ) )
+					+ 0.0004 * sin( deg2rad( 2 * $f + $m ) )
+					- 0.0004 * sin( deg2rad( 2 * $f - $m ) )
+					- 0.0006 * sin( deg2rad( 2 * $f + $mprime ) )
+					+ 0.0010 * sin( deg2rad( 2 * $f - $mprime ) )
+					+ 0.0005 * sin( deg2rad( $m + 2 * $mprime ) );
+			$apcor = true;
+		} else if ( abs( $phase - 0.25 ) < 0.01 || abs( $phase - 0.75 ) < 0.01 ) {
+			$pt +=  (0.1721 - 0.0004 * $t) * sin( deg2rad( $m ) )
+					+ 0.0021 * sin( deg2rad( 2 * $m ) )
+					- 0.6280 * sin( deg2rad( $mprime ) )
+					+ 0.0089 * sin( deg2rad( 2 * $mprime) )
+					- 0.0004 * sin( deg2rad( 3 * $mprime ) )
+					+ 0.0079 * sin( deg2rad( 2 * $f ) )
+					- 0.0119 * sin( deg2rad( $m + $mprime ) )
+					- 0.0047 * sin( deg2rad ( $m - $mprime ) )
+					+ 0.0003 * sin( deg2rad( 2 * $f + $m ) )
+					- 0.0004 * sin( deg2rad( 2 * $f - $m ) )
+					- 0.0006 * sin( deg2rad( 2 * $f + $mprime ) )
+					+ 0.0021 * sin( deg2rad( 2 * $f - $mprime ) )
+					+ 0.0003 * sin( deg2rad( $m + 2 * $mprime ) )
+					+ 0.0004 * sin( deg2rad( $m - 2 * $mprime ) )
+					- 0.0003 * sin( deg2rad( 2 * $m + $mprime ) );
+		if ( $phase < 0.5 )		// First quarter correction
+			$pt += 0.0028 - 0.0004 * cos( rad2deg( $m ) ) + 0.0003 * cos( rad2deg( $mprime ) );
+		else	// Last quarter correction
+			$pt += -0.0028 + 0.0004 * cos( rad2deg( $m ) ) - 0.0003 * cos( rad2deg( $mprime ) );
+			$apcor = true;
+		}
+		if (!$apcor)	// function was called with an invalid phase selector
+			return false;
+
+		return $pt;
+	}
+
+	/* 	Find time of phases of the moon which surround the current date.
+		Five phases are found, starting and
+		ending with the new moons which bound the  current lunation.
+	*/
+	private function phasehunt() {
+		$sdate = $this->utctoj( $this->timestamp ) + 0.5;
+		$adate = $sdate - 45;
+		list( $dd, $mm, $yy ) = $this->jyear( $adate );
+		$k1 = floor( ( $yy + ( ( $mm - 1 ) * ( 1.0 / 12.0 ) ) - 1900 ) * 12.3685 );
+		$adate = $nt1 = $this->meanphase( $adate, $k1 );
+
+		while (true) {
+			$adate += $this->synmonth;
+			$k2 = $k1 + 1;
+			$nt2 = $this->meanphase( $adate, $k2 );
+			if ( $nt1 <= $sdate && $nt2 > $sdate )
+				break;
+			$nt1 = $nt2;
+			$k1 = $k2;
+		}
+
+		// results in Julian dates
+		$data = array(
+			$this->truephase( $k1, 0.0 ),
+			$this->truephase( $k1, 0.25 ),
+			$this->truephase( $k1, 0.5 ),
+			$this->truephase( $k1, 0.75 ),
+			$this->truephase( $k2, 0.0 )
+		);
+
+		$this->quarters = array();
+		foreach( $data as $v )
+			$this->quarters[] = ( $v - 2440587.5 ) * 86400;	// convert to UNIX time
+	}
+
+	/*  Convert GMT date and time to astronomical Julian time (i.e. Julian date plus day fraction).  */
+	private function utctoj( $ts ) {
+		$year = gmdate( 'Y', $ts );
+		$mon = gmdate( 'n', $ts );
+		$mday = gmdate( 'j', $ts );
+		$hour = gmdate( 'G', $ts );
+		$min = gmdate( 'i', $ts );
+		$sec = gmdate( 's', $ts );
+
+		// Algorithm as given in Meeus, Astronomical Algorithms, Chapter 7, page 61
+		$m = $mon;
+		$y = $year;
+
+		if ( $m <= 2 ) {
+			$y--;
+			$m += 12;
+		}
+
+		/* Determine whether date is in Julian or Gregorian calendar based on
+		   canonical date of calendar reform. */
+
+		if ( $year < 1582 || ( $year == 1582 && ( $mon < 9 || ( $mon == 9 && $mday < 5 ) ) ) ) {
+			$b = 0;
+		} else {
+			$a = (int) ( $y / 100 );
+			$b = 2 - $a + ( $a / 4 );
+		}
+
+		return ( 365.25 * ( $y + 4716 ) + intval( 30.6001 * ( $m + 1 ) ) + $mday + $b - 1524.5 ) + ( ( $sec + 60 * ( $min + 60 * $hour ) ) / 86400 );
+	}
+
+	/*  Convert	Julian	date  to  year,  month, day, which are (note that year is a long).  */
+	private function jyear($td) {
+		$td += 0.5;
+		$z = floor( $td );
+		$f = $td - $z;
+
+		if ( $z < 2299161.0 ) {
+			$a = $z;
+		} else {
+			$alpha = floor( ( $z - 1867216.25 ) / 36524.25 );
+			$a = $z + 1 + $alpha - floor( $alpha / 4 );
+		}
+
+		$b = $a + 1524;
+		$c = floor( ( $b - 122.1 ) / 365.25 );
+		$d = floor( 365.25 * $c );
+		$e = floor( ( $b - $d ) / 30.6001 );
+
+		$dd = (int) ( $b - $d - floor( 30.6001 * $e) + $f );
+		$mm = (int) ( $e < 14 ? ( $e - 1 ) : ( $e - 13 ) );
+		$yy = ( $mm > 2 ) ? ( $c - 4716 ) : ( $c - 4715 );
+		return array( $dd, $mm, $yy );
+	}
+
+	function get_phase( $n ) {
+		if( is_null( $this->quarters ) )
+			$this->phasehunt();
+
+		return $this->quarters[$n];
+	}
+
 	/* Public functions for accessing results */
 
 	function phase(){
@@ -147,4 +336,23 @@ class MoonPhase {
 		return $this->sunangdia;
 	}
 
+	function new_moon(){
+		return $this->get_phase( 0 );
+	}
+
+	function first_quarter(){
+		return $this->get_phase( 1 );
+	}
+
+	function full_moon(){
+		return $this->get_phase( 2 );
+	}
+
+	function last_quarter(){
+		return $this->get_phase( 3 );
+	}
+
+	function next_new_moon(){
+		return $this->get_phase( 4 );
+	}
 }
