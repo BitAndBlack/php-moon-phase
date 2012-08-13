@@ -1,23 +1,31 @@
 <?php
 /**
  * Moon phase calculation class
- * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw/) 
+ * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw/)
  * by Samir Shah (http://rayofsolaris.net)
  * Last modified August 2012
  **/
 
 class MoonPhase {
+	private $phase;
+	private $illum;
+	private $age;
+	private $dist;
+	private $angdia;
+	private $sundist;
+	private $sunangdia;
+
 	function __construct($pdate) {
 		/*  Astronomical constants  */
 		$epoch = 2444238.5;			// 1980 January 0.0
-	  
+
 		/*  Constants defining the Sun's apparent orbit  */
 		$elonge = 278.833540;		// Ecliptic longitude of the Sun at epoch 1980.0
 		$elongp = 282.596403;		// Ecliptic longitude of the Sun at perigee
 		$eccent = 0.016718;			// Eccentricity of Earth's orbit
 		$sunsmax = 1.495985e8;		// Semi-major axis of Earth's orbit, km
 		$sunangsiz = 0.533128;		// Sun's angular size, degrees, at semi-major axis distance
-	  
+
 		/*  Elements of the Moon's orbit, epoch 1980.0  */
 		$mmlong = 64.975464;		// Moon's mean longitude at the epoch
 		$mmlongp = 349.383063;		// Mean longitude of the perigee at the epoch
@@ -29,14 +37,14 @@ class MoonPhase {
 		$mparallax = 0.9507;		// Parallax at distance a from Earth
 		$synmonth = 29.53058868;	// Synodic month (new Moon to new Moon)
 		$lunatbase = 2423436.0;		// Base date for E. W. Brown's numbered series of lunations (1923 January 16)
-	  
+
 		/*  Properties of the Earth  */
 		// $earthrad = 6378.16;				// Radius of Earth in kilometres
 		// $PI = 3.14159265358979323846;	// Assume not near black hole
 
 		// pdate is coming in as a UNIX timstamp, so convert it to Julian
 		$pdate =  $pdate / 86400 + 2440587.5;
-		
+
 		/* Calculation of the Sun's position */
 
 		$Day = $pdate - $epoch;								// Date within epoch
@@ -46,7 +54,7 @@ class MoonPhase {
 		$Ec = sqrt((1 + $eccent) / (1 - $eccent)) * tan($Ec / 2);
 		$Ec = 2 * rad2deg(atan($Ec));						// True anomaly
 		$Lambdasun = $this->fixangle($Ec + $elongp);		// Sun's geocentric ecliptic longitude
-		
+
 		$F = ((1 + $eccent * cos(deg2rad($Ec))) / (1 - $eccent * $eccent));	// Orbital distance factor
 		$SunDist = $sunsmax / $F;							// Distance to Sun in km
 		$SunAng = $F * $sunangsiz;							// Sun's angular size in degrees
@@ -81,7 +89,7 @@ class MoonPhase {
 		$MoonDFrac = $MoonDist / $msmax;
 		$MoonAng = $mangsiz / $MoonDFrac;								// Moon's angular diameter
 		// $MoonPar = $mparallax / $MoonDFrac;							// Moon's parallax
-		
+
 		// store results
 		$this->phase = $this->fixangle($MoonAge) / 360;					// Phase (0 to 1)
 		$this->illum = $MoonPhase;										// Illuminated fraction (0 to 1)
@@ -91,7 +99,7 @@ class MoonPhase {
 		$this->sundist = $SunDist;										// Distance to Sun (kilometres)
 		$this->sunangdia = $SunAng;										// Sun's angular diameter (degrees)
 	}
-	
+
 	private function fixangle($a) {
 		return ( $a - 360 * floor($a / 360) );
 	}
@@ -104,8 +112,39 @@ class MoonPhase {
 		do {
 			$delta = $e - $ecc * sin($e) - $m;
 			$e -= $delta / ( 1 - $ecc * cos($e) );
-		} 
+		}
 		while ( abs($delta) > $epsilon );
 		return $e;
 	}
+
+	/* Public functions for accessing results */
+
+	function phase(){
+		return $this->phase;
+	}
+
+	function illumination(){
+		return $this->illum;
+	}
+
+	function age(){
+		return $this->age;
+	}
+
+	function distance(){
+		return $this->dist;
+	}
+
+	function diameter(){
+		return $this->angdia;
+	}
+
+	function sundistance(){
+		return $this->sundist;
+	}
+
+	function sundiameter(){
+		return $this->sunangdia;
+	}
+
 }
