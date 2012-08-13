@@ -214,10 +214,13 @@ class MoonPhase {
 		ending with the new moons which bound the  current lunation.
 	*/
 	private function phasehunt() {
-		$sdate = $this->utctoj( $this->timestamp ) + 0.5;
+		$sdate = $this->utctojulian( $this->timestamp ) + 0.5;
 		$adate = $sdate - 45;
-		list( $dd, $mm, $yy ) = $this->jyear( $adate );
-		$k1 = floor( ( $yy + ( ( $mm - 1 ) * ( 1.0 / 12.0 ) ) - 1900 ) * 12.3685 );
+		$ats = $this->timestamp - 86400 * 44.5;
+		$yy = (int) gmdate( 'Y', $ats );
+		$mm = (int) gmdate( 'n', $ats );
+
+		$k1 = floor( ( $yy + ( ( $mm - 1 ) * ( 1 / 12 ) ) - 1900 ) * 12.3685 );
 		$adate = $nt1 = $this->meanphase( $adate, $k1 );
 
 		while (true) {
@@ -244,62 +247,12 @@ class MoonPhase {
 			$this->quarters[] = ( $v - 2440587.5 ) * 86400;	// convert to UNIX time
 	}
 
-	/*  Convert GMT date and time to astronomical Julian time (i.e. Julian date plus day fraction).  */
-	private function utctoj( $ts ) {
-		$year = gmdate( 'Y', $ts );
-		$mon = gmdate( 'n', $ts );
-		$mday = gmdate( 'j', $ts );
-		$hour = gmdate( 'G', $ts );
-		$min = gmdate( 'i', $ts );
-		$sec = gmdate( 's', $ts );
-
-		// Algorithm as given in Meeus, Astronomical Algorithms, Chapter 7, page 61
-		$m = $mon;
-		$y = $year;
-
-		if ( $m <= 2 ) {
-			$y--;
-			$m += 12;
-		}
-
-		/* Determine whether date is in Julian or Gregorian calendar based on
-		   canonical date of calendar reform. */
-
-		if ( $year < 1582 || ( $year == 1582 && ( $mon < 9 || ( $mon == 9 && $mday < 5 ) ) ) ) {
-			$b = 0;
-		} else {
-			$a = (int) ( $y / 100 );
-			$b = 2 - $a + ( $a / 4 );
-		}
-
-		return ( 365.25 * ( $y + 4716 ) + intval( 30.6001 * ( $m + 1 ) ) + $mday + $b - 1524.5 ) + ( ( $sec + 60 * ( $min + 60 * $hour ) ) / 86400 );
+	/*  Convert UNIX timestamp to astronomical Julian time (i.e. Julian date plus day fraction).  */
+	private function utctojulian( $ts ) {
+		return $ts / 86400 + 2440587.5;
 	}
 
-	/*  Convert	Julian	date  to  year,  month, day, which are (note that year is a long).  */
-	private function jyear($td) {
-		$td += 0.5;
-		$z = floor( $td );
-		$f = $td - $z;
-
-		if ( $z < 2299161.0 ) {
-			$a = $z;
-		} else {
-			$alpha = floor( ( $z - 1867216.25 ) / 36524.25 );
-			$a = $z + 1 + $alpha - floor( $alpha / 4 );
-		}
-
-		$b = $a + 1524;
-		$c = floor( ( $b - 122.1 ) / 365.25 );
-		$d = floor( 365.25 * $c );
-		$e = floor( ( $b - $d ) / 30.6001 );
-
-		$dd = (int) ( $b - $d - floor( 30.6001 * $e) + $f );
-		$mm = (int) ( $e < 14 ? ( $e - 1 ) : ( $e - 13 ) );
-		$yy = ( $mm > 2 ) ? ( $c - 4716 ) : ( $c - 4715 );
-		return array( $dd, $mm, $yy );
-	}
-
-	function get_phase( $n ) {
+	private function get_phase( $n ) {
 		if( is_null( $this->quarters ) )
 			$this->phasehunt();
 
