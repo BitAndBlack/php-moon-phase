@@ -32,3 +32,7 @@ Include the moon-phase.php file in your script, and then simply create an instan
 	echo "The moon is currently $age days old, and is therefore $stage. ";
 	echo "It is $distance km from the centre of the Earth. ";
 	echo "The next new moon is at $next.";
+
+## Help
+
+For bugs/enhancements, feel free to either raise an issue or pull request in GitHub, or [contact me](http://rayofsolaris.net/contact/).
