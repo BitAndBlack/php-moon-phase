@@ -20,7 +20,10 @@ class MoonPhase {
 
 	private $quarters = null;
 
-	function __construct($pdate) {
+	function __construct( $pdate = null ) {
+		if( is_null( $pdate ) )
+			$pdate = time();
+
 		/*  Astronomical constants  */
 		$epoch = 2444238.5;			// 1980 January 0.0
 
