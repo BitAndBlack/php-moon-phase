@@ -214,9 +214,9 @@ class MoonPhase {
 		ending with the new moons which bound the  current lunation.
 	*/
 	private function phasehunt() {
-		$sdate = $this->utctojulian( $this->timestamp ) + 0.5;
+		$sdate = $this->utctojulian( $this->timestamp );
 		$adate = $sdate - 45;
-		$ats = $this->timestamp - 86400 * 44.5;
+		$ats = $this->timestamp - 86400 * 45;
 		$yy = (int) gmdate( 'Y', $ats );
 		$mm = (int) gmdate( 'n', $ats );
 
