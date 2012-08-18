@@ -201,9 +201,9 @@ class MoonPhase {
 					+ 0.0004 * sin( deg2rad( $m - 2 * $mprime ) )
 					- 0.0003 * sin( deg2rad( 2 * $m + $mprime ) );
 		if ( $phase < 0.5 )		// First quarter correction
-			$pt += 0.0028 - 0.0004 * cos( rad2deg( $m ) ) + 0.0003 * cos( rad2deg( $mprime ) );
+			$pt += 0.0028 - 0.0004 * cos( deg2rad( $m ) ) + 0.0003 * cos( deg2rad( $mprime ) );
 		else	// Last quarter correction
-			$pt += -0.0028 + 0.0004 * cos( rad2deg( $m ) ) - 0.0003 * cos( rad2deg( $mprime ) );
+			$pt += -0.0028 + 0.0004 * cos( deg2rad( $m ) ) - 0.0003 * cos( deg2rad( $mprime ) );
 			$apcor = true;
 		}
 		if (!$apcor)	// function was called with an invalid phase selector
