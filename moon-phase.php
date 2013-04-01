@@ -117,8 +117,7 @@ class MoonPhase {
 
 	//  KEPLER  --   Solve the equation of Kepler.
 	private function kepler($m, $ecc) {
-		//double e, delta;
-		$epsilon = pow(1, -6);
+		$epsilon = 0.000001;	// 1E-6
 		$e = $m = deg2rad($m);
 		do {
 			$delta = $e - $ecc * sin($e) - $m;
