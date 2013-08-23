@@ -1,0 +1,25 @@
+{
+    "name": "linkorb/php-moon-phase",
+    "description": "A PHP class for calculating the phase of the Moon.",
+    "homepage": "http://www.github.com/erikscheepers/php-moon-phase",
+    "keywords": ["php", "moon", "phase"],
+    "type": "library",
+    "authors": [
+        {
+            "name": "Erik Scheepers",
+            "email": "e.scheepers@linkorb.com",
+            "role": "Packaging for composer"
+        },
+        {
+            "name": "Samir Shah",
+            "email": "samir@rayofsolaris.net",
+            "role": "Source files"
+        }
+    ],
+    "require": {
+        "php": ">=5.0.0"
+    },
+    "autoload": {
+	"files": ["moon-phase.php"]        
+    }
+}
