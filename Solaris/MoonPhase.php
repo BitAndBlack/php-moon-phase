@@ -3,7 +3,7 @@
  * Moon phase calculation class
  * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw/)
  * by Samir Shah (http://rayofsolaris.net)
- * Last modified August 2012
+ * License: MIT
  **/
 namespace Solaris;
 

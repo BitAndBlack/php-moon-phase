@@ -4,9 +4,10 @@
     "homepage": "http://www.github.com/solarissmoke/php-moon-phase",
     "keywords": ["php", "moon", "phase"],
     "type": "library",
+    "license": "MIT",
     "authors": [
         { "name": "Samir Shah", "email": "samir@rayofsolaris.net" },
-		{ "name": "Erik Scheepers", "email": "e.scheepers@linkorb.com", "role": "Packaging for composer" }
+        { "name": "Erik Scheepers", "email": "e.scheepers@linkorb.com", "role": "Packaging for composer" }
     ],
     "require": {
         "php": ">=5.3.0"
