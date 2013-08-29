@@ -5,6 +5,7 @@
  * by Samir Shah (http://rayofsolaris.net)
  * Last modified August 2012
  **/
+namespace Solaris;
 
 class MoonPhase {
 	private $timestamp;
