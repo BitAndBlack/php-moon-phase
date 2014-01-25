@@ -314,4 +314,10 @@ class MoonPhase {
 	function next_new_moon(){
 		return $this->get_phase( 4 );
 	}
+
+	function phase_name() {
+		$names = array( 'New Moon', 'Waxing Crescent', 'First Quarter', 'Waxing Gibbous', 'Full Moon', 'Waning Gibbous', 'Third Quarter', 'Waning Crescent', 'New Moon' );
+		// There are eight phases, evenly split. A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+		return $names[ floor( ( $this->phase + 0.0625 ) * 8 ) ];
+	}
 }

@@ -15,14 +15,15 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
  - `illumination()`: the illuminated fraction of the Moon (0 = New, 1 = Full).
  - `age()`: the age of the Moon, in days.
  - `distance()`: the distance of the Moon from the centre of the Earth (kilometres).
- - `diameter()`: the angular diameter subtended by the Moon as seen by an observer at the centre of the Earth (radians).
+ - `diameter()`: the angular diameter subtended by the Moon as seen by an observer at the centre of the Earth (degrees).
  - `sundistance()`: the distance to the Sun (kilometres).
- - `sundiameter()`: the angular diameter subtended by the Sun as seen by an observer at the centre of the Earth (radians).
+ - `sundiameter()`: the angular diameter subtended by the Sun as seen by an observer at the centre of the Earth (degrees).
  - `new_moon()`: the time of the last New Moon (UNIX timestamp).
  - `next_new_moon()`: the time of the next New Moon (UNIX timestamp).
  - `full_moon()`: the time of the Full Moon in the current lunar cycle (UNIX timestamp).
  - `first_quarter()`: the time of the first quarter in the current lunar cycle (UNIX timestamp).
  - `last_quarter()`: the time of the last quarter in the current lunar cycle (UNIX timestamp).
+ - `phase_name()`: the [phase name](http://aa.usno.navy.mil/faq/docs/moon_phases.php).
 
 ### Example
 
