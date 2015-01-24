@@ -231,7 +231,7 @@ class MoonPhase {
 			$k2 = $k1 + 1;
 			$nt2 = $this->meanphase( $adate, $k2 );
 			// if nt2 is close to sdate, then mean phase isn't good enough, we have to be more accurate
-			if( abs( $nt2 - $sdate ) < 0.5 )
+			if( abs( $nt2 - $sdate ) < 0.75 )
 				$nt2 = $this->truephase( $k2, 0.0 );
 			if ( $nt1 <= $sdate && $nt2 > $sdate )
 				break;
