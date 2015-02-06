@@ -245,7 +245,10 @@ class MoonPhase {
 			$this->truephase( $k1, 0.25 ),
 			$this->truephase( $k1, 0.5 ),
 			$this->truephase( $k1, 0.75 ),
-			$this->truephase( $k2, 0.0 )
+			$this->truephase( $k2, 0.0 ),
+			$this->truephase( $k2, 0.25 ),
+			$this->truephase( $k2, 0.5 ),
+			$this->truephase( $k2, 0.75 )
 		);
 
 		$this->quarters = array();
@@ -313,6 +316,18 @@ class MoonPhase {
 
 	function next_new_moon(){
 		return $this->get_phase( 4 );
+	}
+
+	function next_first_quarter(){
+		return $this->get_phase( 5 );
+	}
+
+	function next_full_moon(){
+		return $this->get_phase( 6 );
+	}
+
+	function next_last_quarter(){
+		return $this->get_phase( 7 );
 	}
 
 	function phase_name() {
