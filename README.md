@@ -21,8 +21,11 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
  - `new_moon()`: the time of the last New Moon (UNIX timestamp).
  - `next_new_moon()`: the time of the next New Moon (UNIX timestamp).
  - `full_moon()`: the time of the Full Moon in the current lunar cycle (UNIX timestamp).
+ - `next_full_moon()`: the time of the next Full Moon in the current lunar cycle (UNIX timestamp).
  - `first_quarter()`: the time of the first quarter in the current lunar cycle (UNIX timestamp).
+ - `next_first_quarter()`: the time of the next first quarter in the current lunar cycle (UNIX timestamp).
  - `last_quarter()`: the time of the last quarter in the current lunar cycle (UNIX timestamp).
+ - `next_last_quarter()`: the time of the next last quarter in the current lunar cycle (UNIX timestamp).
  - `phase_name()`: the [phase name](http://aa.usno.navy.mil/faq/docs/moon_phases.php).
 
 ### Example
