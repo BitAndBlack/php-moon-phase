@@ -51,10 +51,10 @@ class MoonPhase
 	*/
 	public function __construct($date = null)
 	{
-		$date = time();
-
-		if ((null !== $date) && $date instanceof \DateTime)
-		{
+		if (is_null($date)) {
+			$date = time();
+		}
+		elseif ($date instanceof \DateTime) {
 			$date = $date->getTimestamp();
 		}
 
