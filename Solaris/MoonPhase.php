@@ -270,8 +270,8 @@ class MoonPhase
 			else
 			{
 				$pt += -0.0028 + 0.0004 * cos(deg2rad($m)) - 0.0003 * cos(deg2rad($mprime));
-				$apcor = true;
 			}
+			$apcor = true;
 		}
 
 		return $apcor ? $pt : null;
