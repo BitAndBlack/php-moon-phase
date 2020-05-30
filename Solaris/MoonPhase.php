@@ -44,6 +44,9 @@ class MoonPhase
 	/** @var array quarters */
 	protected $quarters = false;
 
+	/** @var array degrees */
+	protected $moondegree;
+
 	/**
 	* Constructor
 	*
@@ -136,6 +139,7 @@ class MoonPhase
 		$this->age = $synmonth * $this->phase;							// Age of moon (days)
 		$this->distance = $MoonDist;									// Distance (kilometres)
 		$this->diameter = $MoonAng;										// Angular diameter (degrees)
+		$this->moondegree = round($MoonAge, 0);								//Age of the Moon in degrees
 		$this->sundistance = $SunDist;									// Distance to Sun (kilometres)
 		$this->sundiameter = $SunAng;									// Sun's angular diameter (degrees)
 	}
