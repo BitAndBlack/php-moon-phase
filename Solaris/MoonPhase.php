@@ -47,6 +47,12 @@ class MoonPhase
 	/** @var array degrees */
 	protected $age_in_degrees;
 
+	/** @var float ecliptic longitude */
+	private $longitude;
+	
+	/** @var float ecliptic latitude */
+    private $latitude;
+
 	/**
 	* Constructor
 	*
@@ -142,6 +148,8 @@ class MoonPhase
 		$this->age_in_degrees = $MoonAge;								//Age of the Moon in degrees
 		$this->sundistance = $SunDist;									// Distance to Sun (kilometres)
 		$this->sundiameter = $SunAng;									// Sun's angular diameter (degrees)
+        $this->longitude = $Lambdamoon;									// Ecliptic Longitude
+        $this->latitude = $BetaM;										// Ecliptic Latitude
 	}
 
 	/**
@@ -421,4 +429,41 @@ class MoonPhase
 
 		return $names[floor(($this->phase + 0.0625) * 8)];
 	}
+
+	/**
+	* Get current zodiac sign name
+	*
+	* @return string
+	*/
+	function zodiac_sign(){
+        if ($this->longitude < 33.18) {
+            $zodiac = "aries";
+        } else if ($this->longitude < 51.16) {
+            $zodiac = "taurus";
+        } else if ($this->longitude < 93.44) {
+            $zodiac = "gemini";
+        } else if ($this->longitude < 119.48) {
+            $zodiac = "cancer";
+        } else if ($this->longitude < 135.30) {
+            $zodiac = "leo";
+        } else if ($this->longitude < 173.34) {
+            $zodiac = "virgo";
+        } else if ($this->longitude < 224.17) {
+            $zodiac = "libra";
+        } else if ($this->longitude < 242.57) {
+            $zodiac = "scorpio";
+        } else if ($this->longitude < 271.26) {
+            $zodiac = "sagittarius";
+        } else if ($this->longitude < 302.49) {
+            $zodiac = "capricorn";
+        } else if ($this->longitude < 311.72) {
+            $zodiac = "aquarius";
+        } else if ($this->longitude < 348.58) {
+            $zodiac = "pisces";
+        } else {
+            $zodiac = "aries";
+        }
+
+        return $zodiac;
+    }
 }
