@@ -18,14 +18,14 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
  - `get('diameter')`: the angular diameter subtended by the Moon as seen by an observer at the centre of the Earth (degrees).
  - `get('sundistance')`: the distance to the Sun (kilometres).
  - `get('sundiameter')`: the angular diameter subtended by the Sun as seen by an observer at the centre of the Earth (degrees).
- - `get_phase('new_moon')`: the time of the last New Moon (UNIX timestamp).
- - `get_phase('next_new_moon')`: the time of the next New Moon (UNIX timestamp).
+ - `get_phase('new_moon')`: the time of the New Moon in the current lunar cycle, i.e., the start of the current cycle (UNIX timestamp).
+ - `get_phase('next_new_moon')`: the time of the New Moon in the next lunar cycle, i.e., the start of the next cycle (UNIX timestamp).
  - `get_phase('full_moon')`: the time of the Full Moon in the current lunar cycle (UNIX timestamp).
- - `get_phase('next_full_moon')`: the time of the next Full Moon in the current lunar cycle (UNIX timestamp).
+ - `get_phase('next_full_moon')`: the time of the Full Moon in the next lunar cycle (UNIX timestamp).
  - `get_phase('first_quarter')`: the time of the first quarter in the current lunar cycle (UNIX timestamp).
- - `get_phase('next_first_quarter')`: the time of the next first quarter in the current lunar cycle (UNIX timestamp).
+ - `get_phase('next_first_quarter')`: the time of the first quarter in the next lunar cycle (UNIX timestamp).
  - `get_phase('last_quarter')`: the time of the last quarter in the current lunar cycle (UNIX timestamp).
- - `get_phase('next_last_quarter')`: the time of the next last quarter in the current lunar cycle (UNIX timestamp).
+ - `get_phase('next_last_quarter')`: the time of the last quarter in the next lunar cycle (UNIX timestamp).
  - `phase_name()`: the [phase name](http://aa.usno.navy.mil/faq/docs/moon_phases.php).
 
 ### Example
