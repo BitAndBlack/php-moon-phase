@@ -1,3 +1,9 @@
+## Looking for a new maintainer
+
+I no longer have the time to maintain this library, and am looking for someone to take over its maintenance. Please [contact me](http://rayofsolaris.net/contact/) if you're interested. Until/unless I can find a new maintainer, this repository will remain archived.
+
+---
+
 # A PHP class for calculating the phase of the Moon.
 
 MoonPhase is a PHP class for calculating the phase of the Moon, and other related variables. It is based on [Moontool for Windows](http://www.fourmilab.ch/moontoolw/).
@@ -39,7 +45,3 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
 	echo "The moon is currently $age days old, and is therefore $stage. ";
 	echo "It is $distance km from the centre of the Earth. ";
 	echo "The next new moon is at $next.";
-
-## Help
-
-For bugs/enhancements, feel free to either raise an issue or pull request in GitHub, or [contact me](http://rayofsolaris.net/contact/).
