@@ -1,6 +1,6 @@
 ## Looking for a new maintainer
 
-I no longer have the time to maintain this library, and am looking for someone to take over its maintenance. Please [contact me](http://rayofsolaris.net/contact/) if you're interested. Until/unless I can find a new maintainer, this repository will remain archived.
+I no longer have the time to maintain this library, and am looking for someone to take over its maintenance. Please [contact me](http://rayofsolaris.net/) if you're interested. Until/unless I can find a new maintainer, this repository will remain archived.
 
 ---
 
