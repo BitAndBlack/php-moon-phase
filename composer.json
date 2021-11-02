@@ -1,18 +1,31 @@
 {
     "name": "solaris/php-moon-phase",
-    "description": "A PHP class for calculating the phase of the Moon.",
-    "homepage": "http://www.github.com/solarissmoke/php-moon-phase",
-    "keywords": ["php", "moon", "phase"],
     "type": "library",
+    "description": "A PHP class for calculating the phase of the Moon.",
+    "keywords": [
+        "php",
+        "moon",
+        "phase"
+    ],
+    "homepage": "https://www.github.com/moskito89/php-moon-phase",
     "license": "MIT",
     "authors": [
-        { "name": "Samir Shah", "email": "samir@rayofsolaris.net" },
-        { "name": "Erik Scheepers", "email": "e.scheepers@linkorb.com", "role": "Packaging for composer" }
+        {
+            "name": "Samir Shah",
+            "email": "samir@rayofsolaris.net"
+        },
+        {
+            "name": "Erik Scheepers",
+            "email": "e.scheepers@linkorb.com",
+            "role": "Packaging for composer"
+        }
     ],
     "require": {
         "php": ">=7.2.0"
     },
     "autoload": {
-        "psr-0": { "Solaris": "" }
+        "psr-0": {
+            "Solaris": ""
+        }
     }
 }
