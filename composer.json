@@ -23,9 +23,26 @@
     "require": {
         "php": ">=7.2.0"
     },
+    "require-dev": {
+        "phpstan/phpstan": "^1.0",
+        "phpunit/phpunit": "^9.5"
+    },
     "autoload": {
         "psr-4": {
             "Solaris\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Solaris\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpstan": "php vendor/bin/phpstan analyse --configuration ./phpstan.neon --memory-limit=-1 --ansi",
+        "phpunit": "php vendor/bin/phpunit --configuration ./phpunit.xml --colors=always"
+    },
+    "scripts-descriptions": {
+        "phpstan": "Runs PHPStan over the src folder and the tests folder.",
+        "phpunit": "Runs PHPUnit."
     }
 }
