@@ -1,9 +1,3 @@
-## Looking for a new maintainer
-
-I no longer have the time to maintain this library, and am looking for someone to take over its maintenance. Please [contact me](http://rayofsolaris.net/) if you're interested. Until/unless I can find a new maintainer, this repository will remain archived.
-
----
-
 # A PHP class for calculating the phase of the Moon.
 
 MoonPhase is a PHP class for calculating the phase of the Moon, and other related variables. It is based on [Moontool for Windows](http://www.fourmilab.ch/moontoolw/).
