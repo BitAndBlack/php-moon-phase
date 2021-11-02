@@ -30,12 +30,16 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
 
 ### Example
 
-	// create an instance of the class, and use the current time
-	$moon = new Solaris\MoonPhase();
-	$age = round($moon->get('age'), 1);
-	$stage = $moon->phase() < 0.5 ? 'waxing' : 'waning';
-	$distance = round($moon->get('distance'), 2);
-	$next = gmdate('G:i:s, j M Y', $moon->get_phase('next_new_moon'));
-	echo "The moon is currently $age days old, and is therefore $stage. ";
-	echo "It is $distance km from the centre of the Earth. ";
-	echo "The next new moon is at $next.";
+```php
+<?php
+
+// create an instance of the class, and use the current time
+$moon = new Solaris\MoonPhase();
+$age = round($moon->get('age'), 1);
+$stage = $moon->phase() < 0.5 ? 'waxing' : 'waning';
+$distance = round($moon->get('distance'), 2);
+$next = gmdate('G:i:s, j M Y', $moon->get_phase('next_new_moon'));
+echo "The moon is currently $age days old, and is therefore $stage. ";
+echo "It is $distance km from the centre of the Earth. ";
+echo "The next new moon is at $next.";
+```
