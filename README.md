@@ -1,8 +1,8 @@
-## Looking for a new maintainer
-
-I no longer have the time to maintain this library, and am looking for someone to take over its maintenance. Please [contact me](http://rayofsolaris.net/) if you're interested. Until/unless I can find a new maintainer, this repository will remain archived.
-
----
+[![PHP from Packagist](https://img.shields.io/packagist/php-v/solaris/php-moon-phase)](http://www.php.net)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cd2e7203326345d582f5b5a5fd2ffc91)](https://www.codacy.com/gh/Moskito89/php-moon-phase/dashboard)
+[![Latest Stable Version](https://poser.pugx.org/solaris/php-moon-phase/v/stable)](https://packagist.org/packages/solaris/php-moon-phase)
+[![Total Downloads](https://poser.pugx.org/solaris/php-moon-phase/downloads)](https://packagist.org/packages/solaris/php-moon-phase)
+[![License](https://poser.pugx.org/solaris/php-moon-phase/license)](https://packagist.org/packages/solaris/php-moon-phase)
 
 # A PHP class for calculating the phase of the Moon.
 
@@ -10,8 +10,7 @@ MoonPhase is a PHP class for calculating the phase of the Moon, and other relate
 
 ## Installation
 
-MoonPhase is available on Packagist ([solaris/php-moon-phase](http://packagist.org/packages/solaris/php-moon-phase))
-and can be installed using [Composer](http://getcomposer.org/). Alternatively you can grab the code directly from GitHub and include the `MoonPhase.php` script directly or via a PSR-0 autoloader.
+This library is made for the use with [Composer](https://packagist.org/packages/solaris/php-moon-phase). Add it to your project by running `$ composer require solaris/php-moon-phase`.
 
 ## Usage
 
@@ -36,12 +35,24 @@ Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp 
 
 ### Example
 
-	// create an instance of the class, and use the current time
-	$moon = new Solaris\MoonPhase();
-	$age = round($moon->get('age'), 1);
-	$stage = $moon->phase() < 0.5 ? 'waxing' : 'waning';
-	$distance = round($moon->get('distance'), 2);
-	$next = gmdate('G:i:s, j M Y', $moon->get_phase('next_new_moon'));
-	echo "The moon is currently $age days old, and is therefore $stage. ";
-	echo "It is $distance km from the centre of the Earth. ";
-	echo "The next new moon is at $next.";
+```php
+<?php
+
+// create an instance of the class, and use the current time
+$moon = new Solaris\MoonPhase();
+
+$age = round($moon->get('age'), 1);
+$stage = $moon->phase() < 0.5 ? 'waxing' : 'waning';
+$distance = round($moon->get('distance'), 2);
+$next = gmdate('G:i:s, j M Y', $moon->get_phase('next_new_moon'));
+
+echo "The moon is currently $age days old, and is therefore $stage. ";
+echo "It is $distance km from the centre of the Earth. ";
+echo "The next new moon is at $next.";
+```
+
+## Help
+
+If you have any questions, feel free to contact us under `hello@bitandblack.com`.
+
+Further information about Bit&Black can be found under [www.bitandblack.com](https://www.bitandblack.com).
