@@ -1,14 +1,13 @@
 {
     "name": "solaris/php-moon-phase",
-    "type": "library",
     "description": "A PHP class for calculating the phase of the Moon.",
+    "license": "MIT",
+    "type": "library",
     "keywords": [
         "php",
         "moon",
         "phase"
     ],
-    "homepage": "https://www.github.com/moskito89/php-moon-phase",
-    "license": "MIT",
     "authors": [
         {
             "name": "Samir Shah",
@@ -18,10 +17,15 @@
             "name": "Erik Scheepers",
             "email": "e.scheepers@linkorb.com",
             "role": "Packaging for composer"
+        },
+        {
+            "name": "Tobias Köngeter",
+            "email": "hello@bitandblack.com"
         }
     ],
+    "homepage": "https://www.github.com/moskito89/php-moon-phase",
     "require": {
-        "php": ">=7.2.0"
+        "php": ">=7.2"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.0",
