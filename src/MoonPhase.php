@@ -48,11 +48,10 @@ class MoonPhase
 	protected $age_in_degrees;
 
 	/**
-	* Constructor
-	*
-	* @param \DateTime|null $date
-	*/
-	public function __construct($date = null)
+     * Constructor
+     *
+     * @param \DateTime|null $date
+     */
 	{
 		if (is_null($date)) {
 			$date = time();
@@ -145,23 +144,23 @@ class MoonPhase
 	}
 
 	/**
-	* Fix angle
-	*
-	* @param float $a
-	* @return float
-	*/
+     * Fix angle
+     *
+     * @param float $a
+     * @return float
+     */
 	protected function fixangle(float $a): float
 	{
 		return ($a - 360 * floor($a / 360));
 	}
 
 	/**
-	* Kepler
-	*
-	* @param float $m
-	* @param float $ecc
-	* @return float
-	*/
+     * Kepler
+     *
+     * @param float $m
+     * @param float $ecc
+     * @return float
+     */
 	protected function kepler(float $m, float $ecc): float
 	{
 		// 1E-6
@@ -179,15 +178,15 @@ class MoonPhase
 	}
 
 	/**
-	* Calculates time  of the mean new Moon for a given base date.
-	*	 This argument K to this function is the precomputed synodic month index, given by:
-	*	 K = (year - 1900) * 12.3685
-	*	 where year is expressed as a year and fractional year.
-	*
-	* @param int   $date
-	* @param float $k
-	* @return float
-	*/
+     * Calculates time  of the mean new Moon for a given base date.
+     *	 This argument K to this function is the precomputed synodic month index, given by:
+     *	 K = (year - 1900) * 12.3685
+     *	 where year is expressed as a year and fractional year.
+     *
+     * @param int   $date
+     * @param float $k
+     * @return float
+     */
 	protected function meanphase(int $date, float $k): float
 	{
 		// Time in Julian centuries from 1900 January 0.5
@@ -204,13 +203,13 @@ class MoonPhase
 	}
 
 	/**
-	* Given a K value used to determine the mean phase of the new moon and a
-	*	 phase selector (0.0, 0.25, 0.5, 0.75), obtain the true, corrected phase time.
-	*
-	* @param float $k
-	* @param float $phase
-	* @return float|null
-	*/
+     * Given a K value used to determine the mean phase of the new moon and a
+     *	 phase selector (0.0, 0.25, 0.5, 0.75), obtain the true, corrected phase time.
+     *
+     * @param float $k
+     * @param float $phase
+     * @return float|null
+     */
 	protected function truephase(float $k, float $phase): ?float
 	{
 		$apcor = false;
@@ -282,11 +281,11 @@ class MoonPhase
 	}
 
 	/**
-	* Find time of phases of the moon which surround the current date. Five phases are found, starting and
-	*	 ending with the new moons which bound the current lunation.
-	*
-	* @return void
-	*/
+     * Find time of phases of the moon which surround the current date. Five phases are found, starting and
+     *	 ending with the new moons which bound the current lunation.
+     *
+     * @return void
+     */
 	protected function phasehunt(): void
 	{
 		$sdate = $this->utc_to_julian($this->timestamp);
@@ -339,44 +338,44 @@ class MoonPhase
 		}
 	}
 
-	/**
-	* UTC to Julian
-	*
-	* @param int $ts
-	* @return float
-	*/
+    /**
+     * UTC to Julian
+     *
+     * @param int $timestamp
+     * @return float
+     */
 	protected function utc_to_julian(int $timestamp): float
 	{
 		return $timestamp / 86400 + 2440587.5;
 	}
 
 	/**
-	* Get moon phase
-	*
-	* @return float
-	*/
+     * Get moon phase
+     *
+     * @return float
+     */
 	public function phase(): float
 	{
 		return $this->phase;
 	}
 
 	/**
-	* Get moon properties
-	*
-	* @param string $property_name
-	* @return int|float|array|null
-	*/
+     * Get moon properties
+     *
+     * @param string $property_name
+     * @return int|float|array|null
+     */
 	public function get(string $property_name)
 	{
 		return $this->{$property_name} ?? null;
 	}
 
 	/**
-	* Get moon phase data
-	*
-	* @param string $name
-	* @return float
-	*/
+     * Get moon phase data
+     *
+     * @param string $name
+     * @return float
+     */
 	public function get_phase(string $name): ?float
 	{
 		$phases = [
@@ -399,12 +398,12 @@ class MoonPhase
 	}
 
 	/**
-	* Get current phase name
-	*	 There are eight phases, evenly split.
-	*	 A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
-	*
-	* @return string
-	*/
+     * Get current phase name
+     *	 There are eight phases, evenly split.
+     *	 A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     *
+     * @return string
+     */
 	public function phase_name(): string
 	{
 		$names = [
