@@ -9,6 +9,8 @@
 */
 namespace Solaris;
 
+use DateTime;
+
 /**
 * MoonPhase class
 */
@@ -52,11 +54,12 @@ class MoonPhase
      *
      * @param \DateTime|null $date
      */
+	public function __construct(DateTime $date = null)
 	{
 		if (is_null($date)) {
 			$date = time();
 		}
-		elseif ($date instanceof \DateTime) {
+		elseif ($date instanceof DateTime) {
 			$date = $date->getTimestamp();
 		}
 
