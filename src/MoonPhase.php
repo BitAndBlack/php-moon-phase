@@ -57,7 +57,7 @@ class MoonPhase
      */
     public function __construct(DateTime $date = null)
     {
-        if (is_null($date)) {
+        if (null === $date) {
             $date = time();
         }
         elseif ($date instanceof DateTime) {
@@ -122,8 +122,8 @@ class MoonPhase
         $y = sin(deg2rad($lPP - $NP)) * cos(deg2rad($minc));                    // Y inclination coordinate
         $x = cos(deg2rad($lPP - $NP));                                          // X inclination coordinate
 
-        $Lambdamoon = rad2deg(atan2($y, $x)) + $NP;                             // Ecliptic longitude
-        $BetaM = rad2deg(asin(sin(deg2rad($lPP - $NP)) * sin(deg2rad($minc)))); // Ecliptic latitude
+//        $Lambdamoon = rad2deg(atan2($y, $x)) + $NP;                             // Ecliptic longitude
+//        $BetaM = rad2deg(asin(sin(deg2rad($lPP - $NP)) * sin(deg2rad($minc)))); // Ecliptic latitude
 
         // Calculation of the phase of the Moon
         $MoonAge = $lPP - $Lambdasun;                                           // Age of the Moon in degrees
@@ -134,7 +134,7 @@ class MoonPhase
 
         $MoonDFrac = $MoonDist / $msmax;
         $MoonAng = $mangsiz / $MoonDFrac;                                       // Moon's angular diameter
-        // $MoonPar = $mparallax / $MoonDFrac;                                  // Moon's parallax
+//        $MoonPar = $mparallax / $MoonDFrac;                                     // Moon's parallax
 
         // Store results
         $this->phase = $this->fixangle($MoonAge) / 360;                         // Phase (0 to 1)
