@@ -43,10 +43,10 @@ class MoonPhase
 	/** @var float synmonth */
 	protected $synmonth;
 
-	/** @var array quarters */
-	protected $quarters = false;
+	/** @var array<int, float>|null quarters */
+	protected $quarters = null;
 
-	/** @var array degrees */
+	/** @var float degrees */
 	protected $age_in_degrees;
 
 	/**
@@ -298,13 +298,13 @@ class MoonPhase
 		$mm = (int) gmdate('n', $ats);
 
 		$k1 = floor(($yy + (($mm - 1) * (1 / 12)) - 1900) * 12.3685);
-		$adate = $nt1 = $this->meanphase($adate, $k1);
+		$adate = $nt1 = $this->meanphase((int) $adate, $k1);
 
 		while (true)
 		{
 			$adate += $this->synmonth;
 			$k2 = $k1 + 1;
-			$nt2 = $this->meanphase( $adate, $k2 );
+			$nt2 = $this->meanphase((int) $adate, $k2 );
 
 			// If nt2 is close to sdate, then mean phase isn't good enough, we have to be more accurate
 			if (abs($nt2 - $sdate) < 0.75)
@@ -366,7 +366,7 @@ class MoonPhase
      * Get moon properties
      *
      * @param string $property_name
-     * @return int|float|array|null
+     * @return int|float|array<mixed>|null
      */
 	public function get(string $property_name)
 	{
@@ -392,8 +392,7 @@ class MoonPhase
 			'next_last_quarter',
 		];
 
-		if ($this->quarters === false)
-		{
+		if (null === $this->quarters) {
 			$this->phasehunt();
 		}
 
