@@ -79,12 +79,12 @@ class MoonPhase
         // Elements of the Moon's orbit, epoch 1980.0
         $mmlong = 64.975464;        // Moon's mean longitude at the epoch
         $mmlongp = 349.383063;      // Mean longitude of the perigee at the epoch
-        $mlnode = 151.950429;       // Mean longitude of the node at the epoch
-        $minc = 5.145396;           // Inclination of the Moon's orbit
+//        $mlnode = 151.950429;       // Mean longitude of the node at the epoch
+//        $minc = 5.145396;           // Inclination of the Moon's orbit
         $mecc = 0.054900;           // Eccentricity of the Moon's orbit
         $mangsiz = 0.5181;          // Moon's angular size at distance a from Earth
         $msmax = 384401;            // Semi-major axis of Moon's orbit in km
-        $mparallax = 0.9507;        // Parallax at distance a from Earth
+//        $mparallax = 0.9507;        // Parallax at distance a from Earth
         $synmonth = 29.53058868;    // Synodic month (new Moon to new Moon)
 
         $this->synmonth = $synmonth;
@@ -108,7 +108,7 @@ class MoonPhase
         // Calculation of the Moon's position
         $ml = $this->fixangle(13.1763966 * $Day + $mmlong);                     // Moon's mean longitude
         $MM = $this->fixangle($ml - 0.1114041 * $Day - $mmlongp);               // Moon's mean anomaly
-        $MN = $this->fixangle($mlnode - 0.0529539 * $Day);                      // Moon's ascending node mean longitude
+//        $MN = $this->fixangle($mlnode - 0.0529539 * $Day);                      // Moon's ascending node mean longitude
         $Ev = 1.2739 * sin(deg2rad(2 * ($ml - $Lambdasun) - $MM));              // Evection
         $Ae = 0.1858 * sin(deg2rad($M));                                        // Annual equation
         $A3 = 0.37 * sin(deg2rad($M));                                          // Correction term
@@ -118,9 +118,9 @@ class MoonPhase
         $lP = $ml + $Ev + $mEc - $Ae + $A4;                                     // Corrected longitude
         $V = 0.6583 * sin(deg2rad(2 * ($lP - $Lambdasun)));                     // Variation
         $lPP = $lP + $V;                                                        // True longitude
-        $NP = $MN - 0.16 * sin(deg2rad($M));                                    // Corrected longitude of the node
-        $y = sin(deg2rad($lPP - $NP)) * cos(deg2rad($minc));                    // Y inclination coordinate
-        $x = cos(deg2rad($lPP - $NP));                                          // X inclination coordinate
+//        $NP = $MN - 0.16 * sin(deg2rad($M));                                    // Corrected longitude of the node
+//        $y = sin(deg2rad($lPP - $NP)) * cos(deg2rad($minc));                    // Y inclination coordinate
+//        $x = cos(deg2rad($lPP - $NP));                                          // X inclination coordinate
 
 //        $Lambdamoon = rad2deg(atan2($y, $x)) + $NP;                             // Ecliptic longitude
 //        $BetaM = rad2deg(asin(sin(deg2rad($lPP - $NP)) * sin(deg2rad($minc)))); // Ecliptic latitude
