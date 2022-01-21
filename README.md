@@ -56,4 +56,3 @@ echo "The next new moon is at $next.";
 If you have any questions, feel free to contact us under `hello@bitandblack.com`.
 
 Further information about Bit&Black can be found under [www.bitandblack.com](https://www.bitandblack.com).
-Further information about Bit&Black can be found under [www.bitandblack.com](https://www.bitandblack.com).
