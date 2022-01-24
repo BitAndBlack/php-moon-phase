@@ -1,18 +1,52 @@
 {
     "name": "solaris/php-moon-phase",
     "description": "A PHP class for calculating the phase of the Moon.",
-    "homepage": "http://www.github.com/solarissmoke/php-moon-phase",
-    "keywords": ["php", "moon", "phase"],
-    "type": "library",
     "license": "MIT",
-    "authors": [
-        { "name": "Samir Shah", "email": "samir@rayofsolaris.net" },
-        { "name": "Erik Scheepers", "email": "e.scheepers@linkorb.com", "role": "Packaging for composer" }
+    "type": "library",
+    "keywords": [
+        "php",
+        "moon",
+        "phase"
     ],
+    "authors": [
+        {
+            "name": "Samir Shah",
+            "email": "samir@rayofsolaris.net"
+        },
+        {
+            "name": "Erik Scheepers",
+            "email": "e.scheepers@linkorb.com",
+            "role": "Packaging for composer"
+        },
+        {
+            "name": "Tobias Köngeter",
+            "email": "hello@bitandblack.com"
+        }
+    ],
+    "homepage": "https://www.github.com/moskito89/php-moon-phase",
     "require": {
-        "php": ">=7.2.0"
+        "php": ">=7.2"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.0",
+        "phpunit/phpunit": "^9.5"
     },
     "autoload": {
-        "psr-0": { "Solaris": "" }
+        "psr-4": {
+            "Solaris\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Solaris\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "phpstan": "php vendor/bin/phpstan analyse --configuration ./phpstan.neon --memory-limit=-1 --ansi",
+        "phpunit": "php vendor/bin/phpunit --configuration ./phpunit.xml --colors=always"
+    },
+    "scripts-descriptions": {
+        "phpstan": "Runs PHPStan over the src folder and the tests folder.",
+        "phpunit": "Runs PHPUnit."
     }
 }
