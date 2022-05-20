@@ -2,3 +2,4 @@
 /vendor
 .phpunit.result.cache
 /tests/build
+composer.lock
