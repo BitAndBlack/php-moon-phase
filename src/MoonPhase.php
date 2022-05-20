@@ -343,8 +343,21 @@ class MoonPhase
      * Get moon phase
      *
      * @return float
+     * @deprecated The method `phase` has been deprecated. Please use `getPhase` instead.
+     * @todo Remove in v3.0.
      */
     public function phase(): float
+    {
+        trigger_error('The method `phase` has been deprecated. Please use `getPhase` instead.', E_USER_DEPRECATED);
+        return $this->getPhase();
+    }
+
+    /**
+     * Returns the moon phase.
+     *
+     * @return float
+     */
+    public function getPhase(): float
     {
         return $this->phase;
     }
@@ -352,21 +365,114 @@ class MoonPhase
     /**
      * Get moon properties
      *
-     * @param string $property_name
+     * @param string $propertyName
      * @return int|float|array<mixed>|null
+     * @deprecated The method `get` has been deprecated.
+     * @todo Remove in v3.0.
      */
-    public function get(string $property_name)
+    public function get(string $propertyName)
     {
-        return $this->{$property_name} ?? null;
+        if (!property_exists($this, $propertyName)) {
+            return null;
+        }
+
+        $methods = [
+            'illumination' => 'getIllumination',
+            'age' => 'getAge',
+            'distance' => 'getDistance',
+            'diameter' => 'getDiameter',
+            'sundistance' => 'getSunDistance',
+            'sundiameter' => 'getSunDiameter',
+        ];
+
+        if (array_key_exists($propertyName, $methods)) {
+            trigger_error('The method `get(\''.$propertyName.'\')` has been deprecated. '.
+                'Please use `'.$methods[$propertyName].'()` instead.',
+                E_USER_DEPRECATED
+            );
+
+            return $this->{$methods[$propertyName]}();
+        }
+
+        trigger_error('The method `get` has been deprecated.', E_USER_DEPRECATED);
+        return null;
+    }
+
+    /**
+     * @return float
+     */
+    public function getIllumination(): float
+    {
+        return $this->illumination;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAge(): float
+    {
+        return $this->age;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDistance(): float
+    {
+        return $this->distance;
+    }
+
+    /**
+     * @return float
+     */
+    public function getDiameter(): float
+    {
+        return $this->diameter;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSunDistance(): float
+    {
+        return $this->sundistance;
+    }
+
+    /**
+     * @return float
+     */
+    public function getSunDiameter(): float
+    {
+        return $this->sundiameter;
     }
 
     /**
      * Get moon phase data
      *
      * @param string $name
-     * @return float
+     * @return float|null
+     * @deprecated The method `get_phase` has been deprecated. Please use one of the new getters instead.
+     *             For example if your method call is `get_phase('new_moon')`, the new method is `getPhaseNewMoon()`
+     * @todo Remove in v3.0.
      */
     public function get_phase(string $name): ?float
+    {
+        trigger_error('The method `get_phase` has been deprecated. '.
+            'Please use one of the new getters instead. For example if your method call is `get_phase(\'new_moon\')`, '.
+            'the new method is `getPhaseNewMoon()`',
+            E_USER_DEPRECATED
+        );
+
+        return $this->getPhaseByName($name);
+    }
+
+    /**
+     * Get moon phase data
+     *
+     * @param string $name
+     * @return float|null
+     */
+    public function getPhaseByName(string $name): ?float
     {
         $phases = [
             'new_moon',
@@ -392,8 +498,26 @@ class MoonPhase
      *     A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
      *
      * @return string
+     * @deprecated The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.
+     * @todo Remove in v3.0.
      */
     public function phase_name(): string
+    {
+        trigger_error('The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.',
+            E_USER_DEPRECATED
+        );
+
+        return $this->getPhaseName();
+    }
+
+    /**
+     * Get current phase name
+     *     There are eight phases, evenly split.
+     *     A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     *
+     * @return string
+     */
+    public function getPhaseName(): string
     {
         $names = [
             'New Moon',
@@ -408,5 +532,45 @@ class MoonPhase
         ];
 
         return $names[floor(($this->phase + 0.0625) * 8)];
+    }
+
+    public function getPhaseNewMoon(): ?float
+    {
+        return $this->getPhaseByName('new_moon');
+    }
+
+    public function getPhaseFirstQuarter(): ?float
+    {
+        return $this->getPhaseByName('first_quarter');
+    }
+
+    public function getPhaseFullMoon(): ?float
+    {
+        return $this->getPhaseByName('full_moon');
+    }
+
+    public function getPhaseLastQuarter(): ?float
+    {
+        return $this->getPhaseByName('last_quarter');
+    }
+
+    public function getPhaseNextNewMoon(): ?float
+    {
+        return $this->getPhaseByName('next_new_moon');
+    }
+
+    public function getPhaseNextFirstQuarter(): ?float
+    {
+        return $this->getPhaseByName('next_first_quarter');
+    }
+
+    public function getPhaseNextFullMoon(): ?float
+    {
+        return $this->getPhaseByName('next_full_moon');
+    }
+
+    public function getPhaseNextLastQuarter(): ?float
+    {
+        return $this->getPhaseByName('next_last_quarter');
     }
 }
