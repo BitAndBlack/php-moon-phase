@@ -53,16 +53,14 @@ class MoonPhase
     /**
      * Constructor
      *
-     * @param \DateTime|null $date
+     * @param DateTime|null $date
      */
     public function __construct(DateTime $date = null)
     {
-        if (null === $date) {
-            $date = time();
-        }
-        elseif ($date instanceof DateTime) {
-            $date = $date->getTimestamp();
-        }
+        $date = null !== $date
+            ? $date->getTimestamp()
+            : time()
+        ;
 
         $this->timestamp = $date;
 
@@ -171,12 +169,10 @@ class MoonPhase
         $epsilon = 0.000001;
         $e = $m = deg2rad($m);
 
-        do
-        {
+        do {
             $delta = $e - $ecc * sin($e) - $m;
             $e -= $delta / (1 - $ecc * cos($e));
-        }
-        while (abs($delta) > $epsilon);
+        } while (abs($delta) > $epsilon);
 
         return $e;
     }
@@ -232,8 +228,7 @@ class MoonPhase
         $mprime = 306.0253 + 385.81691806 * $k + 0.0107306 * $t2 + 0.00001236 * $t3;    // Moon's mean anomaly
         $f = 21.2964 + 390.67050646 * $k - 0.0016528 * $t2 - 0.00000239 * $t3;            // Moon's argument of latitude
 
-        if ($phase < 0.01 || abs($phase - 0.5) < 0.01)
-        {
+        if ($phase < 0.01 || abs($phase - 0.5) < 0.01) {
             // Corrections for New and Full Moon
             $pt += (0.1734 - 0.000393 * $t) * sin(deg2rad($m))
                 + 0.0021 * sin(deg2rad(2 * $m))
@@ -250,9 +245,7 @@ class MoonPhase
                 + 0.0005 * sin(deg2rad($m + 2 * $mprime));
 
             $apcor = true;
-        }
-        else if (abs($phase - 0.25) < 0.01 || abs($phase - 0.75) < 0.01)
-        {
+        } elseif (abs($phase - 0.25) < 0.01 || abs($phase - 0.75) < 0.01) {
             $pt += (0.1721 - 0.0004 * $t) * sin(deg2rad($m))
                 + 0.0021 * sin(deg2rad(2 * $m))
                 - 0.6280 * sin(deg2rad($mprime))
@@ -270,12 +263,9 @@ class MoonPhase
                 - 0.0003 * sin(deg2rad(2 * $m + $mprime));
 
             // First and last quarter corrections
-            if ($phase < 0.5)
-            {
+            if ($phase < 0.5) {
                 $pt += 0.0028 - 0.0004 * cos(deg2rad($m)) + 0.0003 * cos(deg2rad($mprime));
-            }
-            else
-            {
+            } else {
                 $pt += -0.0028 + 0.0004 * cos(deg2rad($m)) - 0.0003 * cos(deg2rad($mprime));
             }
             $apcor = true;
@@ -301,20 +291,17 @@ class MoonPhase
         $k1 = floor(($yy + (($mm - 1) * (1 / 12)) - 1900) * 12.3685);
         $adate = $nt1 = $this->meanphase((int) $adate, $k1);
 
-        while (true)
-        {
+        while (true) {
             $adate += $this->synmonth;
             $k2 = $k1 + 1;
-            $nt2 = $this->meanphase((int) $adate, $k2 );
+            $nt2 = $this->meanphase((int) $adate, $k2);
 
             // If nt2 is close to sdate, then mean phase isn't good enough, we have to be more accurate
-            if (abs($nt2 - $sdate) < 0.75)
-            {
+            if (abs($nt2 - $sdate) < 0.75) {
                 $nt2 = $this->truephase($k2, 0.0);
             }
 
-            if ($nt1 <= $sdate && $nt2 > $sdate)
-            {
+            if ($nt1 <= $sdate && $nt2 > $sdate) {
                 break;
             }
 
@@ -335,8 +322,7 @@ class MoonPhase
         ];
 
         $this->quarters = [];
-        foreach ($dates as $jdate)
-        {
+        foreach ($dates as $jdate) {
             // Convert to UNIX time
             $this->quarters[] = ($jdate - 2440587.5) * 86400;
         }

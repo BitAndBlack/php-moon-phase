@@ -3,8 +3,8 @@
 namespace Solaris\Tests;
 
 use DateTime;
-use Solaris\MoonPhase;
 use PHPUnit\Framework\TestCase;
+use Solaris\MoonPhase;
 
 /**
  * Class MoonPhaseTest.

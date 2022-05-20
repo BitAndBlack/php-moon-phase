@@ -29,7 +29,9 @@
     },
     "require-dev": {
         "phpstan/phpstan": "^1.0",
-        "phpunit/phpunit": "^9.5"
+        "phpunit/phpunit": "^9.5",
+        "rector/rector": "^0.12",
+        "symplify/easy-coding-standard": "^10.2"
     },
     "autoload": {
         "psr-4": {
@@ -41,12 +43,17 @@
             "Solaris\\Tests\\": "tests/"
         }
     },
+    "config": {
+        "sort-packages": true
+    },
     "scripts": {
         "phpstan": "php vendor/bin/phpstan analyse --configuration ./phpstan.neon --memory-limit=-1 --ansi",
-        "phpunit": "php vendor/bin/phpunit --configuration ./phpunit.xml --colors=always"
+        "phpunit": "php vendor/bin/phpunit --configuration ./phpunit.xml --colors=always",
+        "refactor": "php vendor/bin/rector && php vendor/bin/ecs --fix"
     },
     "scripts-descriptions": {
         "phpstan": "Runs PHPStan over the src folder and the tests folder.",
-        "phpunit": "Runs PHPUnit."
+        "phpunit": "Runs PHPUnit.",
+        "refactor": "Runs tools to refactor the code."
     }
 }
