@@ -386,8 +386,9 @@ class MoonPhase
         ];
 
         if (array_key_exists($propertyName, $methods)) {
-            trigger_error('The method `get(\''.$propertyName.'\')` has been deprecated. '.
-                'Please use `'.$methods[$propertyName].'()` instead.',
+            trigger_error(
+                'The method `get(\'' . $propertyName . '\')` has been deprecated. ' .
+                'Please use `' . $methods[$propertyName] . '()` instead.',
                 E_USER_DEPRECATED
             );
 
@@ -457,8 +458,9 @@ class MoonPhase
      */
     public function get_phase(string $name): ?float
     {
-        trigger_error('The method `get_phase` has been deprecated. '.
-            'Please use one of the new getters instead. For example if your method call is `get_phase(\'new_moon\')`, '.
+        trigger_error(
+            'The method `get_phase` has been deprecated. ' .
+            'Please use one of the new getters instead. For example if your method call is `get_phase(\'new_moon\')`, ' .
             'the new method is `getPhaseNewMoon()`',
             E_USER_DEPRECATED
         );
@@ -503,7 +505,8 @@ class MoonPhase
      */
     public function phase_name(): string
     {
-        trigger_error('The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.',
+        trigger_error(
+            'The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.',
             E_USER_DEPRECATED
         );
 
