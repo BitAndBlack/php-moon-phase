@@ -47,9 +47,9 @@ $stage = $moonPhase->getPhase() < 0.5 ? 'waxing' : 'waning';
 $distance = round($moonPhase->getDistance(), 2);
 $next = gmdate('G:i:s, j M Y', $moonPhase->getPhaseNextNewMoon());
 
-echo "The moon is currently " . $age . " days old, and is therefore " . $stage . ". ";
-echo "It is " . $distance . " km from the centre of the Earth. ";
-echo "The next new moon is at " . $next . ".";
+echo 'The moon is currently ' . $age . ' days old, and is therefore ' . $stage . '. ';
+echo 'It is ' . $distance . ' km from the centre of the Earth. ';
+echo 'The next new moon is at ' . $next . '. ';
 ```
 
 ## Help
