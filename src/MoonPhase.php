@@ -153,7 +153,7 @@ class MoonPhase
      */
     protected function fixangle(float $a): float
     {
-        return ($a - 360 * floor($a / 360));
+        return $a - 360 * floor($a / 360);
     }
 
     /**
@@ -318,7 +318,7 @@ class MoonPhase
             $this->truephase($k2, 0.0),
             $this->truephase($k2, 0.25),
             $this->truephase($k2, 0.5),
-            $this->truephase($k2, 0.75)
+            $this->truephase($k2, 0.75),
         ];
 
         $this->quarters = [];
