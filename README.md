@@ -14,10 +14,12 @@ This library is made for the use with [Composer](https://packagist.org/packages/
 
 ## Usage
 
-Create an instance of the `Solaris\MoonPhase` class, supplying a UNIX timestamp for when you want to determine the moon phase (if you don't then the current time will be used). You can then use the following class functions to access the properties of the object:
+Create an instance of the `Solaris\MoonPhase` class, supplying a `DateTime` object with a UNIX timestamp for when you want to determine the moon phase (if you don't then the current time will be used). 
+
+You can then use the following methods:
 
 -   `getPhase()`: the terminator phase angle as a fraction of a full circle (i.e., 0 to 1). Both 0 and 1 correspond to a New Moon, and 0.5 corresponds to a Full Moon.
--   `getIllumination()`: the illuminated fraction of the Moon (0 = New, 1 = Full).
+-   `getIllumination()`: the illuminated fraction of the Moon (`0` = New, `1` = Full).
 -   `getAge()`: the age of the Moon, in days.
 -   `getDistance()`: the distance of the Moon from the centre of the Earth (kilometres).
 -   `getDiameter()`: the angular diameter subtended by the Moon as seen by an observer at the centre of the Earth (degrees).
