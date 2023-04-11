@@ -1,6 +1,6 @@
 {
     "name": "solaris/php-moon-phase",
-    "description": "A PHP class for calculating the phase of the Moon.",
+    "description": "Calculate the phases of the Moon in PHP.",
     "license": "MIT",
     "type": "library",
     "keywords": [

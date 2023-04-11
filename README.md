@@ -4,9 +4,9 @@
 [![Total Downloads](https://poser.pugx.org/solaris/php-moon-phase/downloads)](https://packagist.org/packages/solaris/php-moon-phase)
 [![License](https://poser.pugx.org/solaris/php-moon-phase/license)](https://packagist.org/packages/solaris/php-moon-phase)
 
-# A PHP class for calculating the phase of the Moon.
+# Solaris PHP Moon Phase
 
-MoonPhase is a PHP class for calculating the phase of the Moon, and other related variables. It is based on [Moontool for Windows](http://www.fourmilab.ch/moontoolw/).
+Calculate the phases of the Moon in PHP. This library is based on [Moontool for Windows](http://www.fourmilab.ch/moontoolw/).
 
 ## Installation
 
@@ -14,11 +14,11 @@ This library is made for the use with [Composer](https://packagist.org/packages/
 
 ## Usage
 
-Create an instance of the `Solaris\MoonPhase` class, supplying a `DateTime` object with a UNIX timestamp for when you want to determine the moon phase (if you don't then the current time will be used). 
+Create an instance of the `MoonPhase` class, supplying a `DateTime` object with a UNIX timestamp for when you want to determine the moon phase (if you don't then the current time will be used). 
 
 You can then use the following methods:
 
--   `getPhase()`: the terminator phase angle as a fraction of a full circle (i.e., 0 to 1). Both 0 and 1 correspond to a New Moon, and 0.5 corresponds to a Full Moon.
+-   `getPhase()`: the terminator phase angle as a fraction of a full circle (i.e., `0` to `1`). Both `0` and `1` correspond to a New Moon, and `0.5` corresponds to a Full Moon.
 -   `getIllumination()`: the illuminated fraction of the Moon (`0` = New, `1` = Full).
 -   `getAge()`: the age of the Moon, in days.
 -   `getDistance()`: the distance of the Moon from the centre of the Earth (kilometres).
@@ -47,7 +47,7 @@ $moonPhase = new MoonPhase();
 $age = round($moonPhase->getAge(), 1);
 $stage = $moonPhase->getPhase() < 0.5 ? 'waxing' : 'waning';
 $distance = round($moonPhase->getDistance(), 2);
-$next = gmdate('G:i:s, j M Y', $moonPhase->getPhaseNextNewMoon());
+$next = gmdate('G:i:s, j M Y', (int) $moonPhase->getPhaseNextNewMoon());
 
 echo 'The moon is currently ' . $age . ' days old, and is therefore ' . $stage . '. ';
 echo 'It is ' . $distance . ' km from the centre of the Earth. ';

@@ -1,20 +1,20 @@
 <?php
 
 /**
+ * Solaris PHP Moon Phase. Calculate the phases of the Moon in PHP.
+ * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw).
  *
- * Moon phase calculation class
- * Adapted for PHP from Moontool for Windows (http://www.fourmilab.ch/moontoolw/)
- * by Samir Shah (http://rayofsolaris.net)
- * License: MIT
+ * @author Samir Shah <http://rayofsolaris.net>
+ * @author Tobias Köngeter <https://www.bitandblack.com>
+ * @copyright Copyright © Bit&Black
+ * @link https://www.bitandblack.com
+ * @license MIT
  */
 
 namespace Solaris;
 
 use DateTime;
 
-/**
- * MoonPhase class
- */
 class MoonPhase
 {
     protected int $timestamp;
