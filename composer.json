@@ -23,7 +23,7 @@
             "email": "hello@bitandblack.com"
         }
     ],
-    "homepage": "https://www.github.com/moskito89/php-moon-phase",
+    "homepage": "https://github.com/BitAndBlack/php-moon-phase",
     "require": {
         "php": ">=7.2"
     },
