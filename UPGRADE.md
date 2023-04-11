@@ -1,5 +1,18 @@
 # Upgrades
 
+## 2.x to 3.0
+
+In `v3.0` some internal methods and properties have been renamed. This should only affect you, if you are extending the MoonPhase class.
+
+Additionally, some deprecated methods have been removed. If you were still using them, please make sure to
+
+-   replace `phase_name()` with `getPhaseName()`,
+-   change `get_phase()` with one of its replacing getters. For example if you are using `get_phase('new_moon')`, the new method is `getPhaseNewMoon()`,
+-   replace `get()` with another getter method,
+-   replace `phase()` with `getPhase()`.
+
+The read more about those changes, see [ChangeLog-2.1.md](./ChangeLog-2.1.md).
+
 ## 1.x to 2.0
 
 The `v2.0` release does not add any new features and does not remove any. Instead, some changes have been made to bring the library up to current standards:
