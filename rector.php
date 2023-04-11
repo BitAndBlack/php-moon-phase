@@ -12,5 +12,5 @@ return static function (RectorConfig $rectorConfig): void {
         __DIR__ . DIRECTORY_SEPARATOR . 'vendor',
     ]);
     $rectorConfig->importNames();
-    $rectorConfig->import(LevelSetList::UP_TO_PHP_72);
+    $rectorConfig->import(LevelSetList::UP_TO_PHP_82);
 };

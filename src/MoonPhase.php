@@ -17,42 +17,32 @@ use DateTime;
  */
 class MoonPhase
 {
-    /** @var int timestamp */
-    protected $timestamp;
+    protected int $timestamp;
 
-    /** @var float phase */
-    protected $phase;
+    protected float $phase;
 
-    /** @var float illumination */
-    protected $illumination;
+    protected float $illumination;
 
-    /** @var float age */
-    protected $age;
+    protected float $age;
 
-    /** @var float distance */
-    protected $distance;
+    protected float $distance;
 
-    /** @var float diameter */
-    protected $diameter;
+    protected float $diameter;
 
-    /** @var float sundistance */
-    protected $sundistance;
+    protected float $sunDistance;
 
-    /** @var float sundiameter */
-    protected $sundiameter;
+    protected float $sunDiameter;
 
-    /** @var float synmonth */
-    protected $synmonth;
-
-    /** @var array<int, float>|null quarters */
-    protected $quarters = null;
-
-    /** @var float degrees */
-    protected $age_in_degrees;
+    protected float $synmonth;
 
     /**
-     * Constructor
-     *
+     * @var array<int, float>|null
+     */
+    protected ?array $quarters = null;
+
+    protected float $ageDegrees;
+
+    /**
      * @param DateTime|null $date
      */
     public function __construct(DateTime $date = null)
@@ -65,103 +55,201 @@ class MoonPhase
         $this->timestamp = $date;
 
         // Astronomical constants. 1980 January 0.0
-        $epoch = 2444238.5;
+        $epoch = 2_444_238.5;
+
 
         // Constants defining the Sun's apparent orbit
-        $elonge = 278.833540;       // Ecliptic longitude of the Sun at epoch 1980.0
-        $elongp = 282.596403;       // Ecliptic longitude of the Sun at perigee
-        $eccent = 0.016718;         // Eccentricity of Earth's orbit
-        $sunsmax = 1.495985e8;      // Semi-major axis of Earth's orbit, km
-        $sunangsiz = 0.533128;      // Sun's angular size, degrees, at semi-major axis distance
+
+        // Ecliptic longitude of the Sun at epoch 1980.0
+        $elonge = 278.833540;
+
+        // Ecliptic longitude of the Sun at perigee
+        $elongp = 282.596403;
+
+        // Eccentricity of Earth's orbit
+        $eccent = 0.016718;
+
+        // Semi-major axis of Earth's orbit, km
+        $sunsmax = 1.495985e8;
+
+        // Sun's angular size, degrees, at semi-major axis distance
+        $sunangsiz = 0.533128;
+
 
         // Elements of the Moon's orbit, epoch 1980.0
-        $mmlong = 64.975464;        // Moon's mean longitude at the epoch
-        $mmlongp = 349.383063;      // Mean longitude of the perigee at the epoch
-//        $mlnode = 151.950429;       // Mean longitude of the node at the epoch
-//        $minc = 5.145396;           // Inclination of the Moon's orbit
-        $mecc = 0.054900;           // Eccentricity of the Moon's orbit
-        $mangsiz = 0.5181;          // Moon's angular size at distance a from Earth
-        $msmax = 384401;            // Semi-major axis of Moon's orbit in km
-//        $mparallax = 0.9507;        // Parallax at distance a from Earth
-        $synmonth = 29.53058868;    // Synodic month (new Moon to new Moon)
+
+        // Moon's mean longitude at the epoch
+        $mmlong = 64.975464;
+
+        // Mean longitude of the perigee at the epoch
+        $mmlongp = 349.383063;
+
+        // Mean longitude of the node at the epoch
+        // $mlnode = 151.950429;
+
+        // Inclination of the Moon's orbit
+        // $minc = 5.145396;
+
+        // Eccentricity of the Moon's orbit
+        $mecc = 0.054900;
+
+        // Moon's angular size at distance a from Earth
+        $mangsiz = 0.5181;
+
+        // Semi-major axis of Moon's orbit in km
+        $msmax = 384401;
+
+        // Parallax at distance a from Earth
+        // $mparallax = 0.9507;
+
+        // Synodic month (new Moon to new Moon)
+        $synmonth = 29.53058868;
 
         $this->synmonth = $synmonth;
 
         // date is coming in as a UNIX timstamp, so convert it to Julian
-        $date = $date / 86400 + 2440587.5;
+        $date = $date / 86400 + 2_440_587.5;
+
 
         // Calculation of the Sun's position
-        $Day = $date - $epoch;                                                  // Date within epoch
-        $N = $this->fixangle((360 / 365.2422) * $Day);                          // Mean anomaly of the Sun
-        $M = $this->fixangle($N + $elonge - $elongp);                           // Convert from perigee co-ordinates to epoch 1980.0
-        $Ec = $this->kepler($M, $eccent);                                       // Solve equation of Kepler
-        $Ec = sqrt((1 + $eccent) / (1 - $eccent)) * tan($Ec / 2);
-        $Ec = 2 * rad2deg(atan($Ec));                                           // True anomaly
-        $Lambdasun = $this->fixangle($Ec + $elongp);                            // Sun's geocentric ecliptic longitude
 
-        $F = ((1 + $eccent * cos(deg2rad($Ec))) / (1 - $eccent * $eccent));     // Orbital distance factor
-        $SunDist = $sunsmax / $F;                                               // Distance to Sun in km
-        $SunAng = $F * $sunangsiz;                                              // Sun's angular size in degrees
+        // Date within epoch
+        $day = $date - $epoch;
+
+        // Mean anomaly of the Sun
+        $n = $this->fixAngle((360 / 365.2422) * $day);
+
+        // Convert from perigee co-ordinates to epoch 1980.0
+        $m = $this->fixAngle($n + $elonge - $elongp);
+
+        // Solve equation of Kepler
+        $ec = $this->kepler($m, $eccent);
+        $ec = sqrt((1 + $eccent) / (1 - $eccent)) * tan($ec / 2);
+
+        // True anomaly
+        $ec = 2 * rad2deg(atan($ec));
+
+        // Sun's geocentric ecliptic longitude
+        $lambdaSun = $this->fixAngle($ec + $elongp);
+
+        // Orbital distance factor
+        $f = ((1 + $eccent * cos(deg2rad($ec))) / (1 - $eccent * $eccent));
+
+        // Distance to Sun in km
+        $sunDist = $sunsmax / $f;
+
+        // Sun's angular size in degrees
+        $sunAng = $f * $sunangsiz;
+
 
         // Calculation of the Moon's position
-        $ml = $this->fixangle(13.1763966 * $Day + $mmlong);                     // Moon's mean longitude
-        $MM = $this->fixangle($ml - 0.1114041 * $Day - $mmlongp);               // Moon's mean anomaly
-//        $MN = $this->fixangle($mlnode - 0.0529539 * $Day);                      // Moon's ascending node mean longitude
-        $Ev = 1.2739 * sin(deg2rad(2 * ($ml - $Lambdasun) - $MM));              // Evection
-        $Ae = 0.1858 * sin(deg2rad($M));                                        // Annual equation
-        $A3 = 0.37 * sin(deg2rad($M));                                          // Correction term
-        $MmP = $MM + $Ev - $Ae - $A3;                                           // Corrected anomaly
-        $mEc = 6.2886 * sin(deg2rad($MmP));                                     // Correction for the equation of the centre
-        $A4 = 0.214 * sin(deg2rad(2 * $MmP));                                   // Another correction term
-        $lP = $ml + $Ev + $mEc - $Ae + $A4;                                     // Corrected longitude
-        $V = 0.6583 * sin(deg2rad(2 * ($lP - $Lambdasun)));                     // Variation
-        $lPP = $lP + $V;                                                        // True longitude
-//        $NP = $MN - 0.16 * sin(deg2rad($M));                                    // Corrected longitude of the node
-//        $y = sin(deg2rad($lPP - $NP)) * cos(deg2rad($minc));                    // Y inclination coordinate
-//        $x = cos(deg2rad($lPP - $NP));                                          // X inclination coordinate
 
-//        $Lambdamoon = rad2deg(atan2($y, $x)) + $NP;                             // Ecliptic longitude
-//        $BetaM = rad2deg(asin(sin(deg2rad($lPP - $NP)) * sin(deg2rad($minc)))); // Ecliptic latitude
+        // Moon's mean longitude
+        $ml = $this->fixAngle(13.1763966 * $day + $mmlong);
+
+        // Moon's mean anomaly
+        $mm = $this->fixAngle($ml - 0.1114041 * $day - $mmlongp);
+
+        // Moon's ascending node mean longitude
+        // $MN = $this->fixangle($mlnode - 0.0529539 * $day);
+
+        $evection = 1.2739 * sin(deg2rad(2 * ($ml - $lambdaSun) - $mm));
+
+        $annualEquation = 0.1858 * sin(deg2rad($m));
+
+        // Correction term
+        $a3 = 0.37 * sin(deg2rad($m));
+
+        // Corrected anomaly
+        $mmp = $mm + $evection - $annualEquation - $a3;
+
+        // Correction for the equation of the centre
+        $mEc = 6.2886 * sin(deg2rad($mmp));
+
+        // Another correction term
+        $a4 = 0.214 * sin(deg2rad(2 * $mmp));
+
+        // Corrected longitude
+        $lP = $ml + $evection + $mEc - $annualEquation + $a4;
+
+        $variation = 0.6583 * sin(deg2rad(2 * ($lP - $lambdaSun)));
+
+        // True longitude
+        $lPP = $lP + $variation;
+
+        // Corrected longitude of the node
+        // $NP = $MN - 0.16 * sin(deg2rad($m));
+
+        // Y inclination coordinate
+        // $y = sin(deg2rad($lPP - $NP)) * cos(deg2rad($minc));
+
+        // X inclination coordinate
+        // $x = cos(deg2rad($lPP - $NP));
+
+        // Ecliptic longitude
+        // $Lambdamoon = rad2deg(atan2($y, $x)) + $NP;
+
+        // Ecliptic latitude
+        // $BetaM = rad2deg(asin(sin(deg2rad($lPP - $NP)) * sin(deg2rad($minc))));
+
 
         // Calculation of the phase of the Moon
-        $MoonAge = $lPP - $Lambdasun;                                           // Age of the Moon in degrees
-        $MoonPhase = (1 - cos(deg2rad($MoonAge))) / 2;                          // Phase of the Moon
+
+        // Age of the Moon in degrees
+        $moonAge = $lPP - $lambdaSun;
+
+        // Phase of the Moon
+        $moonPhase = (1 - cos(deg2rad($moonAge))) / 2;
 
         // Distance of moon from the centre of the Earth
-        $MoonDist = ($msmax * (1 - $mecc * $mecc)) / (1 + $mecc * cos(deg2rad($MmP + $mEc)));
+        $moonDist = ($msmax * (1 - $mecc * $mecc)) / (1 + $mecc * cos(deg2rad($mmp + $mEc)));
 
-        $MoonDFrac = $MoonDist / $msmax;
-        $MoonAng = $mangsiz / $MoonDFrac;                                       // Moon's angular diameter
-//        $MoonPar = $mparallax / $MoonDFrac;                                     // Moon's parallax
+        $moonDFrac = $moonDist / $msmax;
+
+        // Moon's angular diameter
+        $moonAng = $mangsiz / $moonDFrac;
+
+        // Moon's parallax
+        // $MoonPar = $mparallax / $moonDFrac;
+
 
         // Store results
-        $this->phase = $this->fixangle($MoonAge) / 360;                         // Phase (0 to 1)
-        $this->illumination = $MoonPhase;                                       // Illuminated fraction (0 to 1)
-        $this->age = $synmonth * $this->phase;                                  // Age of moon (days)
-        $this->distance = $MoonDist;                                            // Distance (kilometres)
-        $this->diameter = $MoonAng;                                             // Angular diameter (degrees)
-        $this->age_in_degrees = $MoonAge;                                       // Age of the Moon in degrees
-        $this->sundistance = $SunDist;                                          // Distance to Sun (kilometres)
-        $this->sundiameter = $SunAng;                                           // Sun's angular diameter (degrees)
+
+        // Phase (0 to 1)
+        $this->phase = $this->fixAngle($moonAge) / 360;
+
+        // Illuminated fraction (0 to 1)
+        $this->illumination = $moonPhase;
+
+        // Age of moon (days)
+        $this->age = $synmonth * $this->phase;
+
+        // Distance (kilometres)
+        $this->distance = $moonDist;
+
+        // Angular diameter (degrees)
+        $this->diameter = $moonAng;
+
+        // Age of the Moon in degrees
+        $this->ageDegrees = $moonAge;
+
+        // Distance to Sun (kilometres)
+        $this->sunDistance = $sunDist;
+
+        // Sun's angular diameter (degrees)
+        $this->sunDiameter = $sunAng;
     }
 
     /**
      * Fix angle
-     *
-     * @param float $a
-     * @return float
      */
-    protected function fixangle(float $a): float
+    protected function fixAngle(float $angle): float
     {
-        return $a - 360 * floor($a / 360);
+        return $angle - 360 * floor($angle / 360);
     }
 
     /**
      * Kepler
-     *
-     * @param float $m
-     * @param float $ecc
-     * @return float
      */
     protected function kepler(float $m, float $ecc): float
     {
@@ -179,54 +267,62 @@ class MoonPhase
 
     /**
      * Calculates time  of the mean new Moon for a given base date.
-     *     This argument K to this function is the precomputed synodic month index, given by:
-     *     K = (year - 1900) * 12.3685
-     *     where year is expressed as a year and fractional year.
-     *
-     * @param int   $date
-     * @param float $k
-     * @return float
+     * This argument K to this function is the precomputed synodic month index, given by:
+     * K = (year - 1900) * 12.3685
+     * where year is expressed as a year and fractional year.
      */
-    protected function meanphase(int $date, float $k): float
+    protected function meanPhase(int $date, float $k): float
     {
         // Time in Julian centuries from 1900 January 0.5
-        $jt = ($date - 2415020.0) / 36525;
+        $jt = ($date - 2_415_020.0) / 36525;
         $t2 = $jt * $jt;
         $t3 = $t2 * $jt;
 
-        $nt1 = 2415020.75933 + $this->synmonth * $k
+        $nt1 = 2_415_020.75933 + $this->synmonth * $k
             + 0.0001178 * $t2
             - 0.000000155 * $t3
-            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $jt - 0.009173 * $t2));
+            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $jt - 0.009173 * $t2))
+        ;
 
         return $nt1;
     }
 
     /**
      * Given a K value used to determine the mean phase of the new moon and a
-     *     phase selector (0.0, 0.25, 0.5, 0.75), obtain the true, corrected phase time.
-     *
-     * @param float $k
-     * @param float $phase
-     * @return float|null
+     * phase selector (0.0, 0.25, 0.5, 0.75), obtain the true, corrected phase time.
      */
-    protected function truephase(float $k, float $phase): ?float
+    protected function truePhase(float $k, float $phase): ?float
     {
         $apcor = false;
 
-        $k += $phase;                // Add phase to new moon time
-        $t = $k / 1236.85;            // Time in Julian centuries from 1900 January 0.5
-        $t2 = $t * $t;                // Square for frequent use
-        $t3 = $t2 * $t;                // Cube for frequent use
-        $pt = 2415020.75933            // Mean time of phase
+        // Add phase to new moon time
+        $k += $phase;
+
+        // Time in Julian centuries from 1900 January 0.5
+        $t = $k / 1236.85;
+
+        // Square for frequent use
+        $t2 = $t * $t;
+
+        // Cube for frequent use
+        $t3 = $t2 * $t;
+
+        // Mean time of phase
+        $pt = 2_415_020.75933
             + $this->synmonth * $k
             + 0.0001178 * $t2
             - 0.000000155 * $t3
-            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $t - 0.009173 * $t2));
+            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $t - 0.009173 * $t2))
+        ;
 
-        $m = 359.2242 + 29.10535608 * $k - 0.0000333 * $t2 - 0.00000347 * $t3;            // Sun's mean anomaly
-        $mprime = 306.0253 + 385.81691806 * $k + 0.0107306 * $t2 + 0.00001236 * $t3;    // Moon's mean anomaly
-        $f = 21.2964 + 390.67050646 * $k - 0.0016528 * $t2 - 0.00000239 * $t3;            // Moon's argument of latitude
+        // Sun's mean anomaly
+        $m = 359.2242 + 29.10535608 * $k - 0.0000333 * $t2 - 0.00000347 * $t3;
+
+        // Moon's mean anomaly
+        $mprime = 306.0253 + 385.81691806 * $k + 0.0107306 * $t2 + 0.00001236 * $t3;
+
+        // Moon's argument of latitude
+        $f = 21.2964 + 390.67050646 * $k - 0.0016528 * $t2 - 0.00000239 * $t3;
 
         if ($phase < 0.01 || abs($phase - 0.5) < 0.01) {
             // Corrections for New and Full Moon
@@ -242,7 +338,8 @@ class MoonPhase
                 - 0.0004 * sin(deg2rad(2 * $f - $m))
                 - 0.0006 * sin(deg2rad(2 * $f + $mprime))
                 + 0.0010 * sin(deg2rad(2 * $f - $mprime))
-                + 0.0005 * sin(deg2rad($m + 2 * $mprime));
+                + 0.0005 * sin(deg2rad($m + 2 * $mprime))
+            ;
 
             $apcor = true;
         } elseif (abs($phase - 0.25) < 0.01 || abs($phase - 0.75) < 0.01) {
@@ -260,7 +357,8 @@ class MoonPhase
                 + 0.0021 * sin(deg2rad(2 * $f - $mprime))
                 + 0.0003 * sin(deg2rad($m + 2 * $mprime))
                 + 0.0004 * sin(deg2rad($m - 2 * $mprime))
-                - 0.0003 * sin(deg2rad(2 * $m + $mprime));
+                - 0.0003 * sin(deg2rad(2 * $m + $mprime))
+            ;
 
             // First and last quarter corrections
             if ($phase < 0.5) {
@@ -268,6 +366,7 @@ class MoonPhase
             } else {
                 $pt += -0.0028 + 0.0004 * cos(deg2rad($m)) - 0.0003 * cos(deg2rad($mprime));
             }
+
             $apcor = true;
         }
 
@@ -276,29 +375,27 @@ class MoonPhase
 
     /**
      * Find time of phases of the moon which surround the current date. Five phases are found, starting and
-     *     ending with the new moons which bound the current lunation.
-     *
-     * @return void
+     * ending with the new moons which bound the current lunation.
      */
-    protected function phasehunt(): void
+    protected function phaseHunt(): void
     {
-        $sdate = $this->utc_to_julian($this->timestamp);
+        $sdate = $this->getJulianFromUTC($this->timestamp);
         $adate = $sdate - 45;
         $ats = $this->timestamp - 86400 * 45;
         $yy = (int) gmdate('Y', $ats);
         $mm = (int) gmdate('n', $ats);
 
         $k1 = floor(($yy + (($mm - 1) * (1 / 12)) - 1900) * 12.3685);
-        $adate = $nt1 = $this->meanphase((int) $adate, $k1);
+        $adate = $nt1 = $this->meanPhase((int) $adate, $k1);
 
         while (true) {
             $adate += $this->synmonth;
             $k2 = $k1 + 1;
-            $nt2 = $this->meanphase((int) $adate, $k2);
+            $nt2 = $this->meanPhase((int) $adate, $k2);
 
             // If nt2 is close to sdate, then mean phase isn't good enough, we have to be more accurate
             if (abs($nt2 - $sdate) < 0.75) {
-                $nt2 = $this->truephase($k2, 0.0);
+                $nt2 = $this->truePhase($k2, 0.0);
             }
 
             if ($nt1 <= $sdate && $nt2 > $sdate) {
@@ -311,168 +408,72 @@ class MoonPhase
 
         // Results in Julian dates
         $dates = [
-            $this->truephase($k1, 0.0),
-            $this->truephase($k1, 0.25),
-            $this->truephase($k1, 0.5),
-            $this->truephase($k1, 0.75),
-            $this->truephase($k2, 0.0),
-            $this->truephase($k2, 0.25),
-            $this->truephase($k2, 0.5),
-            $this->truephase($k2, 0.75),
+            $this->truePhase($k1, 0.0),
+            $this->truePhase($k1, 0.25),
+            $this->truePhase($k1, 0.5),
+            $this->truePhase($k1, 0.75),
+            $this->truePhase($k2, 0.0),
+            $this->truePhase($k2, 0.25),
+            $this->truePhase($k2, 0.5),
+            $this->truePhase($k2, 0.75),
         ];
 
         $this->quarters = [];
+
         foreach ($dates as $jdate) {
             // Convert to UNIX time
-            $this->quarters[] = ($jdate - 2440587.5) * 86400;
+            $this->quarters[] = ($jdate - 2_440_587.5) * 86400;
         }
     }
 
     /**
      * UTC to Julian
-     *
-     * @param int $timestamp
-     * @return float
      */
-    protected function utc_to_julian(int $timestamp): float
+    protected function getJulianFromUTC(int $timestamp): float
     {
-        return $timestamp / 86400 + 2440587.5;
-    }
-
-    /**
-     * Get moon phase
-     *
-     * @return float
-     * @deprecated The method `phase` has been deprecated. Please use `getPhase` instead.
-     * @todo Remove in v3.0.
-     */
-    public function phase(): float
-    {
-        trigger_error('The method `phase` has been deprecated. Please use `getPhase` instead.', E_USER_DEPRECATED);
-        return $this->getPhase();
+        return $timestamp / 86400 + 2_440_587.5;
     }
 
     /**
      * Returns the moon phase.
-     *
-     * @return float
      */
     public function getPhase(): float
     {
         return $this->phase;
     }
 
-    /**
-     * Get moon properties
-     *
-     * @param string $propertyName
-     * @return int|float|array<mixed>|null
-     * @deprecated The method `get` has been deprecated.
-     * @todo Remove in v3.0.
-     */
-    public function get(string $propertyName)
-    {
-        if (!property_exists($this, $propertyName)) {
-            return null;
-        }
-
-        $methods = [
-            'illumination' => 'getIllumination',
-            'age' => 'getAge',
-            'distance' => 'getDistance',
-            'diameter' => 'getDiameter',
-            'sundistance' => 'getSunDistance',
-            'sundiameter' => 'getSunDiameter',
-        ];
-
-        if (array_key_exists($propertyName, $methods)) {
-            trigger_error(
-                'The method `get(\'' . $propertyName . '\')` has been deprecated. ' .
-                'Please use `' . $methods[$propertyName] . '()` instead.',
-                E_USER_DEPRECATED
-            );
-
-            return $this->{$methods[$propertyName]}();
-        }
-
-        trigger_error('The method `get` has been deprecated.', E_USER_DEPRECATED);
-        return null;
-    }
-
-    /**
-     * @return float
-     */
     public function getIllumination(): float
     {
         return $this->illumination;
     }
 
-    /**
-     * @return float
-     */
     public function getAge(): float
     {
         return $this->age;
     }
 
-    /**
-     * @return float
-     */
     public function getDistance(): float
     {
         return $this->distance;
     }
 
-    /**
-     * @return float
-     */
     public function getDiameter(): float
     {
         return $this->diameter;
     }
 
-    /**
-     * @return float
-     */
     public function getSunDistance(): float
     {
-        return $this->sundistance;
+        return $this->sunDistance;
     }
 
-    /**
-     * @return float
-     */
     public function getSunDiameter(): float
     {
-        return $this->sundiameter;
+        return $this->sunDiameter;
     }
 
     /**
      * Get moon phase data
-     *
-     * @param string $name
-     * @return float|null
-     * @deprecated The method `get_phase` has been deprecated. Please use one of the new getters instead.
-     *             For example if your method call is `get_phase('new_moon')`, the new method is `getPhaseNewMoon()`
-     * @todo Remove in v3.0.
-     */
-    public function get_phase(string $name): ?float
-    {
-        trigger_error(
-            'The method `get_phase` has been deprecated. ' .
-            'Please use one of the new getters instead. For example if your method call is `get_phase(\'new_moon\')`, ' .
-            'the new method is `getPhaseNewMoon()`',
-            E_USER_DEPRECATED
-        );
-
-        return $this->getPhaseByName($name);
-    }
-
-    /**
-     * Get moon phase data
-     *
-     * @param string $name
-     * @return float|null
      */
     public function getPhaseByName(string $name): ?float
     {
@@ -488,37 +489,15 @@ class MoonPhase
         ];
 
         if (null === $this->quarters) {
-            $this->phasehunt();
+            $this->phaseHunt();
         }
 
         return $this->quarters[array_flip($phases)[$name]] ?? null;
     }
 
     /**
-     * Get current phase name
-     *     There are eight phases, evenly split.
-     *     A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
-     *
-     * @return string
-     * @deprecated The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.
-     * @todo Remove in v3.0.
-     */
-    public function phase_name(): string
-    {
-        trigger_error(
-            'The method `phase_name` has been deprecated. Please use `getPhaseName()` instead.',
-            E_USER_DEPRECATED
-        );
-
-        return $this->getPhaseName();
-    }
-
-    /**
-     * Get current phase name
-     *     There are eight phases, evenly split.
-     *     A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
-     *
-     * @return string
+     * Get current phase name. There are eight phases, evenly split.
+     * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
      */
     public function getPhaseName(): string
     {

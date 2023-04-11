@@ -20,16 +20,17 @@
         },
         {
             "name": "Tobias Köngeter",
-            "email": "hello@bitandblack.com"
+            "email": "hello@bitandblack.com",
+            "homepage": "https://www.bitandblack.com"
         }
     ],
     "homepage": "https://github.com/BitAndBlack/php-moon-phase",
     "require": {
-        "php": ">=7.2"
+        "php": ">=8.2"
     },
     "require-dev": {
         "phpstan/phpstan": "^1.0",
-        "phpunit/phpunit": "^9.5",
+        "phpunit/phpunit": "^10.0",
         "rector/rector": "^0",
         "symplify/easy-coding-standard": "^11.0"
     },

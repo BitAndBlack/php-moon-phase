@@ -4,3 +4,4 @@
 /tests/build
 composer.lock
 .DS_Store
+/.phpunit.cache
