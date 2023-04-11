@@ -25,6 +25,12 @@
         }
     ],
     "homepage": "https://github.com/BitAndBlack/php-moon-phase",
+    "funding": [
+        {
+            "type": "buymeacoffee",
+            "url": "https://www.buymeacoffee.com/tobiaskoengeter"
+        }
+    ],
     "require": {
         "php": ">=8.2"
     },
