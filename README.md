@@ -33,7 +33,7 @@ You can then use the following methods:
 -   `getPhaseNextFirstQuarter()`: the time of the first quarter in the next lunar cycle (UNIX timestamp).
 -   `getPhaseLastQuarter()`: the time of the last quarter in the current lunar cycle (UNIX timestamp).
 -   `getPhaseNextLastQuarter()`: the time of the last quarter in the next lunar cycle (UNIX timestamp).
--   `getPhaseName()`: the [phase name](http://aa.usno.navy.mil/faq/docs/moon_phases.php).
+-   `getPhaseName()`: the [phase name](https://aa.usno.navy.mil/faq/moon_phases).
 
 ### Example
 
