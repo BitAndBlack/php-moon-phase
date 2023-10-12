@@ -35,7 +35,7 @@ class MoonPhaseTest extends TestCase
         $dateTime = new DateTime('2021-01-01');
         $moonPhase = new MoonPhase($dateTime);
 
-        self::assertEquals(
+        self::assertSame(
             1_607_962_725.6397471,
             $moonPhase->getPhaseNewMoon()
         );

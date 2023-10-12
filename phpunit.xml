@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
-    <coverage>
-        <include>
-            <directory suffix=".php">tests/</directory>
-        </include>
-        <report>
-            <clover outputFile="tests/build/logs/clover.xml"/>
-            <html outputDirectory="tests/build/coverage"/>
-            <text outputFile="tests/build/coverage.txt"/>
-        </report>
-    </coverage>
-    <testsuites>
-        <testsuite name="Proxy Scheduling Test Suite">
-            <directory>tests</directory>
-        </testsuite>
-    </testsuites>
-    <logging>
-        <junit outputFile="tests/build/report.junit.xml"/>
-    </logging>
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" bootstrap="vendor/autoload.php" backupGlobals="false" colors="true" processIsolation="false" stopOnFailure="false" xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.4/phpunit.xsd" cacheDirectory=".phpunit.cache" backupStaticProperties="false">
+  <testsuites>
+    <testsuite name="Proxy Scheduling Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <logging>
+    <junit outputFile="tests/build/report.junit.xml"/>
+  </logging>
+  <source>
+    <include>
+      <directory suffix=".php">tests/</directory>
+    </include>
+  </source>
 </phpunit>

@@ -15,6 +15,9 @@ namespace Solaris;
 
 use DateTime;
 
+/**
+ * @see \Solaris\Tests\MoonPhaseTest
+ */
 class MoonPhase
 {
     protected int $timestamp;
