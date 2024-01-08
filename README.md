@@ -26,7 +26,7 @@ You can then use the following methods:
 -   `getSunDistance()`: the distance to the Sun (kilometres).
 -   `getSunDiameter()`: the angular diameter subtended by the Sun as seen by an observer at the centre of the Earth (degrees).
 -   `getPhaseNewMoon()`: the time of the New Moon in the current lunar cycle, i.e., the start of the current cycle (UNIX timestamp).
--   `getPhaseNextNewMoon())`: the time of the New Moon in the next lunar cycle, i.e., the start of the next cycle (UNIX timestamp).
+-   `getPhaseNextNewMoon()`: the time of the New Moon in the next lunar cycle, i.e., the start of the next cycle (UNIX timestamp).
 -   `getPhaseFullMoon()`: the time of the Full Moon in the current lunar cycle (UNIX timestamp).
 -   `getPhaseNextFullMoon()`: the time of the Full Moon in the next lunar cycle (UNIX timestamp).
 -   `getPhaseFirstQuarter()`: the time of the first quarter in the current lunar cycle (UNIX timestamp).
