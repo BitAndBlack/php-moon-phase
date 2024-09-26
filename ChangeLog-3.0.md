@@ -1,5 +1,11 @@
 # Changes in Solaris Moon Phase v3.0
 
+## 3.1.0 2024-09-26
+
+### Changed
+
+-   Development dependencies have been updated.
+
 ## 3.0.0 2023-04-11
 
 ### Changed 
