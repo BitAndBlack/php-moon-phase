@@ -3,21 +3,20 @@
 use Rector\Config\RectorConfig;
 use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\LevelSetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->parallel();
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withParallel()
+    ->withPaths([
         __DIR__,
-    ]);
-    $rectorConfig->skip([
+    ])
+    ->withSkip([
         __DIR__ . DIRECTORY_SEPARATOR . 'vendor',
         PreferPHPUnitThisCallRector::class,
-    ]);
-    $rectorConfig->importNames();
-    $rectorConfig->import(LevelSetList::UP_TO_PHP_82);
-    $rectorConfig->sets([
-        PHPUnitSetList::PHPUNIT_100,
+    ])
+    ->withSets([
+        PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-    ]);
-};
+    ])
+    ->withImportNames()
+    ->withPhpSets()
+;
