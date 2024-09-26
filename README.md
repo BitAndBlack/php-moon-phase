@@ -1,5 +1,4 @@
 [![PHP from Packagist](https://img.shields.io/packagist/php-v/solaris/php-moon-phase)](http://www.php.net)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/cd2e7203326345d582f5b5a5fd2ffc91)](https://www.codacy.com/gh/Moskito89/php-moon-phase/dashboard)
 [![Latest Stable Version](https://poser.pugx.org/solaris/php-moon-phase/v/stable)](https://packagist.org/packages/solaris/php-moon-phase)
 [![Total Downloads](https://poser.pugx.org/solaris/php-moon-phase/downloads)](https://packagist.org/packages/solaris/php-moon-phase)
 [![License](https://poser.pugx.org/solaris/php-moon-phase/license)](https://packagist.org/packages/solaris/php-moon-phase)
