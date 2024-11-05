@@ -48,7 +48,7 @@ class MoonPhase
     /**
      * @param DateTime|null $date
      */
-    public function __construct(DateTime $date = null)
+    public function __construct(?DateTime $date = null)
     {
         $date = null !== $date
             ? $date->getTimestamp()
