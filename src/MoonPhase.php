@@ -13,7 +13,7 @@
 
 namespace Solaris;
 
-use DateTime;
+use DateTimeInterface;
 
 /**
  * @see \Solaris\Tests\MoonPhaseTest
@@ -46,9 +46,9 @@ class MoonPhase
     protected float $ageDegrees;
 
     /**
-     * @param DateTime|null $date
+     * @param DateTimeInterface|null $date
      */
-    public function __construct(?DateTime $date = null)
+    public function __construct(?DateTimeInterface $date = null)
     {
         $date = null !== $date
             ? $date->getTimestamp()
