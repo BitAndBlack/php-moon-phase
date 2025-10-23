@@ -1,0 +1,9 @@
+/.* export-ignore
+/bitbucket-pipelines.yml export-ignore
+/ChangeLog* export-ignore
+/ecs.php export-ignore
+/phpstan* export-ignore
+/phpunit* export-ignore
+/rector.php export-ignore
+/tests export-ignore
+/devTools export-ignore
