@@ -45,12 +45,9 @@ class MoonPhase
 
     protected float $ageDegrees;
 
-    /**
-     * @param DateTimeInterface|null $date
-     */
     public function __construct(?DateTimeInterface $date = null)
     {
-        $date = null !== $date
+        $date = $date instanceof DateTimeInterface
             ? $date->getTimestamp()
             : time()
         ;
@@ -258,7 +255,8 @@ class MoonPhase
     {
         // 1E-6
         $epsilon = 0.000001;
-        $e = $m = deg2rad($m);
+        $e = deg2rad($m);
+        $m = $e;
 
         do {
             $delta = $e - $ecc * sin($e) - $m;
@@ -281,13 +279,10 @@ class MoonPhase
         $t2 = $jt * $jt;
         $t3 = $t2 * $jt;
 
-        $nt1 = 2_415_020.75933 + $this->synmonth * $k
+        return 2_415_020.75933 + $this->synmonth * $k
             + 0.0001178 * $t2
             - 0.000000155 * $t3
-            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $jt - 0.009173 * $t2))
-        ;
-
-        return $nt1;
+            + 0.00033 * sin(deg2rad(166.56 + 132.87 * $jt - 0.009173 * $t2));
     }
 
     /**
@@ -389,7 +384,8 @@ class MoonPhase
         $mm = (int) gmdate('n', $ats);
 
         $k1 = floor(($yy + (($mm - 1) * (1 / 12)) - 1900) * 12.3685);
-        $adate = $nt1 = $this->meanPhase((int) $adate, $k1);
+        $adate = $this->meanPhase((int) $adate, $k1);
+        $nt1 = $adate;
 
         while (true) {
             $adate += $this->synmonth;

@@ -19,4 +19,14 @@ return RectorConfig::configure()
     ])
     ->withImportNames()
     ->withPhpSets()
+    ->withPreparedSets(
+        deadCode: true,
+        codeQuality: true,
+        codingStyle: true,
+        typeDeclarations: true,
+        typeDeclarationDocblocks: true,
+    )
+    ->withComposerBased(
+        phpunit: true,
+    )
 ;
