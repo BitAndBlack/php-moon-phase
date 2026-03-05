@@ -516,7 +516,7 @@ class MoonPhase
             'New Moon',
         ];
 
-        return $names[floor(($this->phase + 0.0625) * 8)];
+        return $names[(int) floor(($this->phase + 0.0625) * 8)];
     }
 
     public function getPhaseNewMoon(): ?float
