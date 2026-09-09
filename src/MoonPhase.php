@@ -483,7 +483,7 @@ class MoonPhase
             sprintf(
                 '%s() is deprecated and will be removed in the next major release. Please use %s() instead.',
                 __METHOD__,
-                'getPhaseByEnum()'
+                'getPhaseByEnum'
             ),
             E_USER_DEPRECATED
         );
@@ -548,7 +548,7 @@ class MoonPhase
             sprintf(
                 '%s() is deprecated and will be removed in the next major release. Please use %s() instead.',
                 __METHOD__,
-                'getPhaseNameEnum()'
+                'getPhaseNameEnum'
             ),
             E_USER_DEPRECATED
         );
