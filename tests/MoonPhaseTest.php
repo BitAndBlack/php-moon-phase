@@ -18,6 +18,7 @@ use DateTimeImmutable;
 use Iterator;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
+use Solaris\Exception;
 use Solaris\MoonPhase;
 use Solaris\MoonPhaseName;
 
@@ -205,10 +206,71 @@ final class MoonPhaseTest extends TestCase
             default => self::fail(sprintf('Unexpected phase: %s.', $phase->value)),
         };
 
+        self::assertSame($expected, $this->moonPhase->{$method}());
+    }
+
+    /**
+     * @return Iterator<string, array{MoonPhaseName, string}>
+     */
+    public static function provideConvenienceDateTimeGetters(): Iterator
+    {
+        yield 'getPhaseNewMoonDateTime' => [MoonPhaseName::NEW_MOON, '2020-12-14 16:18:45.639747 +00:00'];
+        yield 'getPhaseFirstQuarterDateTime' => [MoonPhaseName::FIRST_QUARTER, '2020-12-21 23:42:31.378691 +00:00'];
+        yield 'getPhaseFullMoonDateTime' => [MoonPhaseName::FULL_MOON, '2020-12-30 03:30:24.957311 +00:00'];
+        yield 'getPhaseLastQuarterDateTime' => [MoonPhaseName::THIRD_QUARTER, '2021-01-06 09:38:35.935376 +00:00'];
+        yield 'getPhaseNextNewMoonDateTime' => [MoonPhaseName::NEXT_NEW_MOON, '2021-01-13 05:02:37.863531 +00:00'];
+        yield 'getPhaseNextFirstQuarterDateTime' => [MoonPhaseName::NEXT_FIRST_QUARTER, '2021-01-20 21:03:35.548459 +00:00'];
+        yield 'getPhaseNextFullMoonDateTime' => [MoonPhaseName::NEXT_FULL_MOON, '2021-01-28 19:18:35.623869 +00:00'];
+        yield 'getPhaseNextLastQuarterDateTime' => [MoonPhaseName::NEXT_LAST_QUARTER, '2021-02-04 17:38:42.464705 +00:00'];
+    }
+
+    #[DataProvider('provideConvenienceDateTimeGetters')]
+    public function testConvenienceDateTimeGetters(MoonPhaseName $phase, string $expected): void
+    {
+        $method = match ($phase) {
+            MoonPhaseName::NEW_MOON => 'getPhaseNewMoonDateTime',
+            MoonPhaseName::FIRST_QUARTER => 'getPhaseFirstQuarterDateTime',
+            MoonPhaseName::FULL_MOON => 'getPhaseFullMoonDateTime',
+            MoonPhaseName::THIRD_QUARTER => 'getPhaseLastQuarterDateTime',
+            MoonPhaseName::NEXT_NEW_MOON => 'getPhaseNextNewMoonDateTime',
+            MoonPhaseName::NEXT_FIRST_QUARTER => 'getPhaseNextFirstQuarterDateTime',
+            MoonPhaseName::NEXT_FULL_MOON => 'getPhaseNextFullMoonDateTime',
+            MoonPhaseName::NEXT_LAST_QUARTER => 'getPhaseNextLastQuarterDateTime',
+            default => self::fail(sprintf('Unexpected phase: %s.', $phase->value)),
+        };
+
         self::assertSame(
             $expected,
-            $this->moonPhase->{$method}()
+            $this->moonPhase->{$method}()->format('Y-m-d H:i:s.u P')
         );
+    }
+
+    /**
+     * @return Iterator<string, array{MoonPhaseName, string}>
+     */
+    public static function providePhaseDateTimes(): Iterator
+    {
+        yield 'new_moon' => [MoonPhaseName::NEW_MOON, '2020-12-14 16:18:45.639747 +00:00'];
+        yield 'first_quarter' => [MoonPhaseName::FIRST_QUARTER, '2020-12-21 23:42:31.378691 +00:00'];
+        yield 'full_moon' => [MoonPhaseName::FULL_MOON, '2020-12-30 03:30:24.957311 +00:00'];
+        yield 'third_quarter' => [MoonPhaseName::THIRD_QUARTER, '2021-01-06 09:38:35.935376 +00:00'];
+        yield 'next_new_moon' => [MoonPhaseName::NEXT_NEW_MOON, '2021-01-13 05:02:37.863531 +00:00'];
+        yield 'next_first_quarter' => [MoonPhaseName::NEXT_FIRST_QUARTER, '2021-01-20 21:03:35.548459 +00:00'];
+        yield 'next_full_moon' => [MoonPhaseName::NEXT_FULL_MOON, '2021-01-28 19:18:35.623869 +00:00'];
+        yield 'next_last_quarter' => [MoonPhaseName::NEXT_LAST_QUARTER, '2021-02-04 17:38:42.464705 +00:00'];
+    }
+
+    #[DataProvider('providePhaseDateTimes')]
+    public function testGetPhaseByEnumDateTime(MoonPhaseName $phase, string $expected): void
+    {
+        self::assertSame($expected, $this->moonPhase->getPhaseByEnumDateTime($phase)->format('Y-m-d H:i:s.u P'));
+    }
+
+    public function testGetPhaseByEnumDateTimeThrowsForVisualPhase(): void
+    {
+        $this->expectException(Exception::class);
+
+        $this->moonPhase->getPhaseByEnumDateTime(MoonPhaseName::WAXING_CRESCENT);
     }
 
     public function testProtectedFixAngle(): void

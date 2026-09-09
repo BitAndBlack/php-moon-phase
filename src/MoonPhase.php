@@ -13,7 +13,9 @@
 
 namespace Solaris;
 
+use DateTimeImmutable;
 use DateTimeInterface;
+use DateTimeZone;
 
 /**
  * @see \Solaris\Tests\MoonPhaseTest
@@ -536,6 +538,28 @@ class MoonPhase
     }
 
     /**
+     * Get moon phase data as a DateTimeImmutable object.
+     *
+     * @throws Exception
+     */
+    public function getPhaseByEnumDateTime(MoonPhaseName $phase): DateTimeImmutable
+    {
+        $timestamp = $this->getPhaseByEnum($phase);
+
+        if (null === $timestamp) {
+            throw new Exception(sprintf('No phase data available for %s.', $phase->value));
+        }
+
+        $dateTime = DateTimeImmutable::createFromFormat('U.u', sprintf('%.6f', $timestamp), new DateTimeZone('UTC'));
+
+        if (false === $dateTime) {
+            throw new Exception(sprintf('Could not convert timestamp %f to a date.', $timestamp));
+        }
+
+        return $dateTime;
+    }
+
+    /**
      * Get current phase name. There are eight phases, evenly split.
      * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
      *
@@ -627,5 +651,45 @@ class MoonPhase
     public function getPhaseNextLastQuarter(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEXT_LAST_QUARTER);
+    }
+
+    public function getPhaseNewMoonDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::NEW_MOON);
+    }
+
+    public function getPhaseFirstQuarterDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::FIRST_QUARTER);
+    }
+
+    public function getPhaseFullMoonDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::FULL_MOON);
+    }
+
+    public function getPhaseLastQuarterDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::THIRD_QUARTER);
+    }
+
+    public function getPhaseNextNewMoonDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_NEW_MOON);
+    }
+
+    public function getPhaseNextFirstQuarterDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_FIRST_QUARTER);
+    }
+
+    public function getPhaseNextFullMoonDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_FULL_MOON);
+    }
+
+    public function getPhaseNextLastQuarterDateTime(): DateTimeImmutable
+    {
+        return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_LAST_QUARTER);
     }
 }
