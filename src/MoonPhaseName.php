@@ -12,6 +12,16 @@
 
 namespace Solaris;
 
+/**
+ * Represents the phases of the Moon.
+ *
+ * The eight plain cases describe the appearance of the Moon as seen from Earth,
+ * from the New Moon to the Waning Crescent. The four `NEXT_*` cases refer to the
+ * next occurrence of the four main phases and are used to look up quarter times.
+ *
+ * Each case has a machine-readable, snake-cased backing value (`->value`) and a
+ * human-readable name returned by {@see MoonPhaseName::label()}.
+ */
 enum MoonPhaseName: string
 {
     case NEW_MOON = 'new_moon';
@@ -38,6 +48,11 @@ enum MoonPhaseName: string
 
     case NEXT_LAST_QUARTER = 'next_last_quarter';
 
+    /**
+     * Returns the human-readable name of the phase.
+     *
+     * @return string the phase label, e.g. 'Full Moon'
+     */
     public function label(): string
     {
         return match ($this) {

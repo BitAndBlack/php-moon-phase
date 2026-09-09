@@ -18,35 +18,83 @@ use DateTimeInterface;
 use DateTimeZone;
 
 /**
+ * Calculates the phases of the Moon for a given point in time.
+ *
+ * Once instantiated, the object exposes measurements such as the illuminated
+ * fraction, the age and distance of the Moon, as well as the exact times of the
+ * lunar quarters surrounding the given date. Quarter times are returned either
+ * as UNIX timestamps (float) or as {@see DateTimeImmutable} objects in UTC.
+ *
  * @see \Solaris\Tests\MoonPhaseTest
  */
 class MoonPhase
 {
+    /**
+     * The UNIX timestamp of the moment this instance was created for.
+     */
     protected int $timestamp;
 
+    /**
+     * The terminator phase angle as a fraction of a full circle (0 to 1).
+     */
     protected float $phase;
 
+    /**
+     * The illuminated fraction of the Moon's disc (0 to 1).
+     */
     protected float $illumination;
 
+    /**
+     * The age of the Moon in days.
+     */
     protected float $age;
 
+    /**
+     * The distance between the Moon and the centre of the Earth in kilometres.
+     */
     protected float $distance;
 
+    /**
+     * The angular diameter subtended by the Moon in degrees.
+     */
     protected float $diameter;
 
+    /**
+     * The distance between the Sun and the Earth in kilometres.
+     */
     protected float $sunDistance;
 
+    /**
+     * The angular diameter subtended by the Sun in degrees.
+     */
     protected float $sunDiameter;
 
+    /**
+     * The length of the synodic month (New Moon to New Moon) in days.
+     */
     protected float $synmonth;
 
     /**
+     * The UNIX timestamps of the eight lunar quarters surrounding the given date,
+     * or null if they have not been computed yet.
+     *
+     * Indexes 0 to 3 are the New Moon, first quarter, Full Moon and last
+     * quarter of the current lunation. Indexes 4 to 7 are those of the next lunation.
+     *
      * @var array<int, float>|null
      */
     protected ?array $quarters = null;
 
+    /**
+     * The age of the Moon in degrees.
+     */
     protected float $ageDegrees;
 
+    /**
+     * Creates a new MoonPhase instance for the given point in time.
+     *
+     * @param DateTimeInterface|null $date The point in time to calculate the moon phase for. If omitted, the current time is used.
+     */
     public function __construct(?DateTimeInterface $date = null)
     {
         $date = $date instanceof DateTimeInterface
@@ -243,7 +291,10 @@ class MoonPhase
     }
 
     /**
-     * Fix angle
+     * Normalizes an angle to the range 0 (inclusive) to 360 (exclusive) degrees.
+     *
+     * @param float $angle the angle to normalize, in degrees
+     * @return float the equivalent angle, in degrees, within 0 .. 360
      */
     protected function fixAngle(float $angle): float
     {
@@ -251,7 +302,11 @@ class MoonPhase
     }
 
     /**
-     * Kepler
+     * Solves Kepler's equation for the eccentric anomaly using Newton's method.
+     *
+     * @param float $m   the mean anomaly, in degrees
+     * @param float $ecc the orbital eccentricity
+     * @return float the eccentric anomaly, in radians
      */
     protected function kepler(float $m, float $ecc): float
     {
@@ -269,10 +324,11 @@ class MoonPhase
     }
 
     /**
-     * Calculates time  of the mean new Moon for a given base date.
-     * This argument K to this function is the precomputed synodic month index, given by:
-     * K = (year - 1900) * 12.3685
-     * where year is expressed as a year and fractional year.
+     * Calculates the time of the mean New Moon for a given synodic month index.
+     *
+     * @param int $date the reference date as a Julian date
+     * @param float $k the precomputed synodic month index, given by `K = (year - 1900) * 12.3685`, where `year` is expressed as a year and fractional year
+     * @return float the mean New Moon time as a Julian date
      */
     protected function meanPhase(int $date, float $k): float
     {
@@ -288,8 +344,11 @@ class MoonPhase
     }
 
     /**
-     * Given a K value used to determine the mean phase of the new moon and a
-     * phase selector (0.0, 0.25, 0.5, 0.75), obtain the true, corrected phase time.
+     * Returns the true, corrected time of a lunar phase for a given synodic month index.
+     *
+     * @param float $k the synodic month index
+     * @param float $phase the phase selector: 0.0 (New Moon), 0.25 (First Quarter), 0.5 (Full Moon) or 0.75 (Last Quarter)
+     * @return float|null the corrected phase time as a Julian date, or null if the phase selector is not one of the four quarters
      */
     protected function truePhase(float $k, float $phase): ?float
     {
@@ -374,8 +433,11 @@ class MoonPhase
     }
 
     /**
-     * Find time of phases of the moon which surround the current date. Five phases are found, starting and
-     * ending with the new moons which bound the current lunation.
+     * Finds the times of the lunar phases which surround the current date and caches them in the `quarters` property.
+     *
+     * The two New Moons that bound the current lunation are found, then the New Moon, first quarter,
+     * Full Moon and last quarter are computed for the current and the following lunation.
+     * All eight results are stored as UNIX timestamps.
      */
     protected function phaseHunt(): void
     {
@@ -428,7 +490,10 @@ class MoonPhase
     }
 
     /**
-     * UTC to Julian
+     * Converts a UNIX timestamp into a Julian date.
+     *
+     * @param int $timestamp the UNIX timestamp
+     * @return float the Julian date
      */
     protected function getJulianFromUTC(int $timestamp): float
     {
@@ -436,46 +501,82 @@ class MoonPhase
     }
 
     /**
-     * Returns the moon phase.
+     * Returns the terminator phase angle as a fraction of a full circle.
+     *
+     * The value ranges from 0 to 1, where both 0 and 1 correspond to a New Moon and 0.5 corresponds to a Full Moon.
+     *
+     * @return float the phase angle of the Moon, from 0 (New Moon) to 1
      */
     public function getPhase(): float
     {
         return $this->phase;
     }
 
+    /**
+     * Returns the illuminated fraction of the Moon's disc.
+     *
+     * @return float the illuminated fraction, from 0 (New Moon) to 1 (Full Moon)
+     */
     public function getIllumination(): float
     {
         return $this->illumination;
     }
 
+    /**
+     * Returns the age of the Moon in days since the last New Moon.
+     *
+     * @return float the age of the Moon in days
+     */
     public function getAge(): float
     {
         return $this->age;
     }
 
+    /**
+     * Returns the distance between the Moon and the centre of the Earth.
+     *
+     * @return float the distance in kilometres
+     */
     public function getDistance(): float
     {
         return $this->distance;
     }
 
+    /**
+     * Returns the angular diameter subtended by the Moon as seen by an observer at the centre of the Earth.
+     *
+     * @return float the angular diameter in degrees
+     */
     public function getDiameter(): float
     {
         return $this->diameter;
     }
 
+    /**
+     * Returns the distance between the Sun and the centre of the Earth.
+     *
+     * @return float the distance in kilometres
+     */
     public function getSunDistance(): float
     {
         return $this->sunDistance;
     }
 
+    /**
+     * Returns the angular diameter subtended by the Sun as seen by an observer at the centre of the Earth.
+     *
+     * @return float the angular diameter in degrees
+     */
     public function getSunDiameter(): float
     {
         return $this->sunDiameter;
     }
 
     /**
-     * Get moon phase data
+     * Returns the UNIX timestamp of a lunar phase by its string key.
      *
+     * @param string $name the phase key, one of 'new_moon', 'first_quarter', 'full_moon', 'last_quarter' or the corresponding 'next_*' variant
+     * @return float|null the UNIX timestamp of the given phase, or null if the name is unknown
      * @deprecated Use {@see getPhaseByEnum()} instead.
      * @todo Remove in v4.0.
      */
@@ -509,7 +610,14 @@ class MoonPhase
     }
 
     /**
-     * Get moon phase data.
+     * Returns the UNIX timestamp of a lunar phase.
+     *
+     * Only the phases that correspond to a lunar quarter have a timestamp: the New Moon, first quarter, Full Moon
+     * and last quarter of the current lunation, as well as those of the next lunation (the `NEXT_*` enum cases).
+     * The purely visual phases return null.
+     *
+     * @param MoonPhaseName $phase the phase to look up
+     * @return float|null the UNIX timestamp of the given phase, or null if the phase has no quarter time
      */
     public function getPhaseByEnum(MoonPhaseName $phase): ?float
     {
@@ -538,9 +646,11 @@ class MoonPhase
     }
 
     /**
-     * Get moon phase data as a DateTimeImmutable object.
+     * Returns a lunar phase as a DateTimeImmutable object in UTC.
      *
-     * @throws Exception
+     * @param MoonPhaseName $phase the phase to look up
+     * @return DateTimeImmutable the phase time as a DateTimeImmutable object, preserving fractional seconds
+     * @throws Exception if the given phase has no quarter time
      */
     public function getPhaseByEnumDateTime(MoonPhaseName $phase): DateTimeImmutable
     {
@@ -560,9 +670,9 @@ class MoonPhase
     }
 
     /**
-     * Get current phase name. There are eight phases, evenly split.
-     * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     * Returns the name of the current phase.
      *
+     * @return string the phase name, e.g. 'Full Moon'
      * @deprecated Use {@see getPhaseNameEnum()} instead.
      * @todo Remove in v4.0.
      */
@@ -593,8 +703,12 @@ class MoonPhase
     }
 
     /**
-     * Get current phase name as enum. There are eight phases, evenly split.
-     * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     * Returns the current phase as a {@see MoonPhaseName} enum.
+     *
+     * There are eight phases, evenly split. A "New Moon" occupies the 1/16th
+     * phases either side of phase = 0, and the rest follow from that.
+     *
+     * @return MoonPhaseName the current phase
      */
     public function getPhaseNameEnum(): MoonPhaseName
     {
@@ -613,81 +727,169 @@ class MoonPhase
         return $names[(int) floor(($this->phase + 0.0625) * 8)];
     }
 
+    /**
+     * Returns the UNIX timestamp of the New Moon in the current lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the New Moon
+     */
     public function getPhaseNewMoon(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEW_MOON);
     }
 
+    /**
+     * Returns the UNIX timestamp of the first quarter in the current lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the first quarter
+     */
     public function getPhaseFirstQuarter(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::FIRST_QUARTER);
     }
 
+    /**
+     * Returns the UNIX timestamp of the Full Moon in the current lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the Full Moon
+     */
     public function getPhaseFullMoon(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::FULL_MOON);
     }
 
+    /**
+     * Returns the UNIX timestamp of the last quarter in the current lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the last quarter
+     */
     public function getPhaseLastQuarter(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::THIRD_QUARTER);
     }
 
+    /**
+     * Returns the UNIX timestamp of the New Moon in the next lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the New Moon
+     */
     public function getPhaseNextNewMoon(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEXT_NEW_MOON);
     }
 
+    /**
+     * Returns the UNIX timestamp of the first quarter in the next lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the first quarter
+     */
     public function getPhaseNextFirstQuarter(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEXT_FIRST_QUARTER);
     }
 
+    /**
+     * Returns the UNIX timestamp of the Full Moon in the next lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the Full Moon
+     */
     public function getPhaseNextFullMoon(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEXT_FULL_MOON);
     }
 
+    /**
+     * Returns the UNIX timestamp of the last quarter in the next lunar cycle.
+     *
+     * @return float|null the UNIX timestamp of the last quarter
+     */
     public function getPhaseNextLastQuarter(): ?float
     {
         return $this->getPhaseByEnum(MoonPhaseName::NEXT_LAST_QUARTER);
     }
 
+    /**
+     * Returns the New Moon in the current lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the New Moon time
+     * @throws Exception
+     */
     public function getPhaseNewMoonDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::NEW_MOON);
     }
 
+    /**
+     * Returns the first quarter in the current lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the first quarter time
+     * @throws Exception
+     */
     public function getPhaseFirstQuarterDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::FIRST_QUARTER);
     }
 
+    /**
+     * Returns the Full Moon in the current lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the Full Moon time
+     * @throws Exception
+     */
     public function getPhaseFullMoonDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::FULL_MOON);
     }
 
+    /**
+     * Returns the last quarter in the current lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the last quarter time
+     * @throws Exception
+     */
     public function getPhaseLastQuarterDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::THIRD_QUARTER);
     }
 
+    /**
+     * Returns the New Moon in the next lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the New Moon time
+     * @throws Exception
+     */
     public function getPhaseNextNewMoonDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_NEW_MOON);
     }
 
+    /**
+     * Returns the first quarter in the next lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the first quarter time
+     * @throws Exception
+     */
     public function getPhaseNextFirstQuarterDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_FIRST_QUARTER);
     }
 
+    /**
+     * Returns the Full Moon in the next lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the Full Moon time
+     * @throws Exception
+     */
     public function getPhaseNextFullMoonDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_FULL_MOON);
     }
 
+    /**
+     * Returns the last quarter in the next lunar cycle as a DateTimeImmutable object in UTC.
+     *
+     * @return DateTimeImmutable the last quarter time
+     * @throws Exception
+     */
     public function getPhaseNextLastQuarterDateTime(): DateTimeImmutable
     {
         return $this->getPhaseByEnumDateTime(MoonPhaseName::NEXT_LAST_QUARTER);
