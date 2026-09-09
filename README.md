@@ -32,7 +32,32 @@ You can then use the following methods:
 -   `getPhaseNextFirstQuarter()`: the time of the first quarter in the next lunar cycle (UNIX timestamp).
 -   `getPhaseLastQuarter()`: the time of the last quarter in the current lunar cycle (UNIX timestamp).
 -   `getPhaseNextLastQuarter()`: the time of the last quarter in the next lunar cycle (UNIX timestamp).
--   `getPhaseName()`: the [phase name](https://aa.usno.navy.mil/faq/moon_phases).
+-   `getPhaseByName(string $name)`: _deprecated, use `getPhaseByEnum(MoonPhaseName)` instead_. Returns the time of the given phase as a UNIX timestamp.
+-   `getPhaseByEnum(MoonPhaseName $phase)`: the time of the given phase as a UNIX timestamp.
+-   `getPhaseNameEnum()`: the current [phase name](https://aa.usno.navy.mil/faq/moon_phases) as a `MoonPhaseName` enum.
+-   `getPhaseName()`: _deprecated, use `getPhaseNameEnum()` instead_. The current [phase name](https://aa.usno.navy.mil/faq/moon_phases) as a string.
+
+### The MoonPhaseName enum
+
+The `MoonPhaseName` enum represents the individual phases of the Moon and is used by the enum-based methods above:
+
+-   `MoonPhaseName::NEW_MOON`
+-   `MoonPhaseName::WAXING_CRESCENT`
+-   `MoonPhaseName::FIRST_QUARTER`
+-   `MoonPhaseName::WAXING_GIBBOUS`
+-   `MoonPhaseName::FULL_MOON`
+-   `MoonPhaseName::WANING_GIBBOUS`
+-   `MoonPhaseName::THIRD_QUARTER`
+-   `MoonPhaseName::WANING_CRESCENT`
+
+In addition to the eight lunar phases, it contains the next occurrences of the four main phases:
+
+-   `MoonPhaseName::NEXT_NEW_MOON`
+-   `MoonPhaseName::NEXT_FIRST_QUARTER`
+-   `MoonPhaseName::NEXT_FULL_MOON`
+-   `MoonPhaseName::NEXT_LAST_QUARTER`
+
+Each case has a `->value` (a machine-readable identifier, e.g., `'new_moon'`) and a `label()` method returning the human-readable name (e.g., `'New Moon'`).
 
 ### Example
 

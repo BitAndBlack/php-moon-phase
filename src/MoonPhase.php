@@ -473,9 +473,21 @@ class MoonPhase
 
     /**
      * Get moon phase data
+     *
+     * @deprecated Use {@see getPhaseByEnum()} instead.
+     * @todo Remove in v4.0.
      */
     public function getPhaseByName(string $name): ?float
     {
+        trigger_error(
+            sprintf(
+                '%s() is deprecated and will be removed in the next major release. Please use %s() instead.',
+                __METHOD__,
+                'getPhaseByEnum()'
+            ),
+            E_USER_DEPRECATED
+        );
+
         $phases = [
             'new_moon',
             'first_quarter',
@@ -495,11 +507,52 @@ class MoonPhase
     }
 
     /**
+     * Get moon phase data.
+     */
+    public function getPhaseByEnum(MoonPhaseName $phase): ?float
+    {
+        if (null === $this->quarters) {
+            $this->phaseHunt();
+        }
+
+        $quarters = [
+            MoonPhaseName::NEW_MOON->value => 0,
+            MoonPhaseName::FIRST_QUARTER->value => 1,
+            MoonPhaseName::FULL_MOON->value => 2,
+            MoonPhaseName::THIRD_QUARTER->value => 3,
+            MoonPhaseName::NEXT_NEW_MOON->value => 4,
+            MoonPhaseName::NEXT_FIRST_QUARTER->value => 5,
+            MoonPhaseName::NEXT_FULL_MOON->value => 6,
+            MoonPhaseName::NEXT_LAST_QUARTER->value => 7,
+        ];
+
+        $index = $quarters[$phase->value] ?? null;
+
+        if (null === $index) {
+            return null;
+        }
+
+        return $this->quarters[$index] ?? null;
+    }
+
+    /**
      * Get current phase name. There are eight phases, evenly split.
      * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     *
+     * @deprecated Use {@see getPhaseNameEnum()} instead.
+     * @todo Remove in v4.0.
      */
     public function getPhaseName(): string
     {
+        trigger_error(
+            sprintf(
+                '%s() is deprecated and will be removed in the next major release. Please use %s() instead.',
+                __METHOD__,
+                'getPhaseNameEnum()'
+            ),
+            E_USER_DEPRECATED
+        );
+
         $names = [
             'New Moon',
             'Waxing Crescent',
@@ -515,43 +568,64 @@ class MoonPhase
         return $names[(int) floor(($this->phase + 0.0625) * 8)];
     }
 
+    /**
+     * Get current phase name as enum. There are eight phases, evenly split.
+     * A "New Moon" occupies the 1/16th phases either side of phase = 0, and the rest follow from that.
+     */
+    public function getPhaseNameEnum(): MoonPhaseName
+    {
+        $names = [
+            MoonPhaseName::NEW_MOON,
+            MoonPhaseName::WAXING_CRESCENT,
+            MoonPhaseName::FIRST_QUARTER,
+            MoonPhaseName::WAXING_GIBBOUS,
+            MoonPhaseName::FULL_MOON,
+            MoonPhaseName::WANING_GIBBOUS,
+            MoonPhaseName::THIRD_QUARTER,
+            MoonPhaseName::WANING_CRESCENT,
+            MoonPhaseName::NEW_MOON,
+        ];
+
+        return $names[(int) floor(($this->phase + 0.0625) * 8)];
+    }
+
     public function getPhaseNewMoon(): ?float
     {
-        return $this->getPhaseByName('new_moon');
+        return $this->getPhaseByEnum(MoonPhaseName::NEW_MOON);
     }
 
     public function getPhaseFirstQuarter(): ?float
     {
-        return $this->getPhaseByName('first_quarter');
+        return $this->getPhaseByEnum(MoonPhaseName::FIRST_QUARTER);
     }
 
     public function getPhaseFullMoon(): ?float
     {
-        return $this->getPhaseByName('full_moon');
+        return $this->getPhaseByEnum(MoonPhaseName::FULL_MOON);
     }
 
     public function getPhaseLastQuarter(): ?float
     {
-        return $this->getPhaseByName('last_quarter');
+        return $this->getPhaseByEnum(MoonPhaseName::THIRD_QUARTER);
     }
 
     public function getPhaseNextNewMoon(): ?float
     {
-        return $this->getPhaseByName('next_new_moon');
+        return $this->getPhaseByEnum(MoonPhaseName::NEXT_NEW_MOON);
     }
 
     public function getPhaseNextFirstQuarter(): ?float
     {
-        return $this->getPhaseByName('next_first_quarter');
+        return $this->getPhaseByEnum(MoonPhaseName::NEXT_FIRST_QUARTER);
     }
 
     public function getPhaseNextFullMoon(): ?float
     {
-        return $this->getPhaseByName('next_full_moon');
+        return $this->getPhaseByEnum(MoonPhaseName::NEXT_FULL_MOON);
     }
 
     public function getPhaseNextLastQuarter(): ?float
     {
-        return $this->getPhaseByName('next_last_quarter');
+        return $this->getPhaseByEnum(MoonPhaseName::NEXT_LAST_QUARTER);
     }
 }
