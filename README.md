@@ -37,6 +37,12 @@ You can then use the following methods:
 -   `getPhaseNameEnum()`: the current [phase name](https://aa.usno.navy.mil/faq/moon_phases) as a `MoonPhaseName` enum.
 -   `getPhaseName()`: _deprecated, use `getPhaseNameEnum()` instead_. The current [phase name](https://aa.usno.navy.mil/faq/moon_phases) as a string.
 
+Each of the quarter-time getters has an equivalent that returns a `DateTimeImmutable` object (in UTC) instead of a UNIX timestamp:
+
+-   `getPhaseNewMoonDateTime()`, `getPhaseFirstQuarterDateTime()`, `getPhaseFullMoonDateTime()`, `getPhaseLastQuarterDateTime()`
+-   `getPhaseNextNewMoonDateTime()`, `getPhaseNextFirstQuarterDateTime()`, `getPhaseNextFullMoonDateTime()`, `getPhaseNextLastQuarterDateTime()`
+-   `getPhaseByEnumDateTime(MoonPhaseName $phase)`: the time of the given phase as a `DateTimeImmutable` object.
+
 ### The MoonPhaseName enum
 
 The `MoonPhaseName` enum represents the individual phases of the Moon and is used by the enum-based methods above:
@@ -71,7 +77,7 @@ $moonPhase = new MoonPhase();
 $age = round($moonPhase->getAge(), 1);
 $stage = $moonPhase->getPhase() < 0.5 ? 'waxing' : 'waning';
 $distance = round($moonPhase->getDistance(), 2);
-$next = gmdate('G:i:s, j M Y', (int) $moonPhase->getPhaseNextNewMoon());
+$next = $moonPhase->getPhaseNextNewMoonDateTime()->format('G:i:s, j M Y');
 
 echo 'The moon is currently ' . $age . ' days old, and is therefore ' . $stage . '. ';
 echo 'It is ' . $distance . ' km from the centre of the Earth. ';
